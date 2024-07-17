@@ -9,6 +9,8 @@ import Contactus from "./pages/Contactus.jsx";
 import Courses from "./pages/Courses.jsx";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const router = createBrowserRouter([
   {
@@ -41,9 +43,7 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <RouterProvider router={router}>
-      <App />
-    </RouterProvider>
-  </React.StrictMode>
+  <RouterProvider router={router}>
+    <App />
+  </RouterProvider>
 );

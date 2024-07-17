@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 const HeroSection = () => {
   const navigate = useNavigate();
   return (
-    <div className="flex mx-auto">
+    <div className="flex mx-auto mt-20">
       <div className="flex flex-col w-1/2 mt-10 mx-auto">
         <span className="text-5xl font-bold">
           Crack Placements with

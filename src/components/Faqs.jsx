@@ -74,7 +74,7 @@ const Faqs = () => {
   return (
     <div className="mt-24">
       <div>
-        <img src={logo} className="mx-auto size-28" alt="faqs" />
+        <img src={logo} className="mx-auto size-24" alt="faqs" />
         <span className="block text-center text-3xl font-bold mt-4">
           Frequently Asked Questions
         </span>

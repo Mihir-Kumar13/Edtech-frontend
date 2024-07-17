@@ -5,13 +5,13 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-zinc-900 text-white  mt-4 shadow-[0_4px_6px_-1px_rgba(255,255,255,0.5),_0_2px_4px_-2px_rgba(255,255,255,0.3)]">
+    <footer className="bg-zinc-900 p-3 text-white  mt-4 shadow-[0_4px_6px_-1px_rgba(255,255,255,0.5),_0_2px_4px_-2px_rgba(255,255,255,0.3)]">
       <div className="container mx-auto flex justify-between ">
         <div>
           <Link to="/">
             <img src={logo} className="invert-color size-24" alt="logo" />
           </Link>
-          <p className="mt-2">© 2024 EdTech, Inc. All rights reserved.</p>
+          <p className="mt-2">© 2024 Learn Verse, Inc. All rights reserved.</p>
         </div>
 
         <div className="space-y-2">
