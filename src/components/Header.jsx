@@ -1,13 +1,31 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/4CxDWZ01.svg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { removeUser } from "../Store/authSlice";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleLogout = () => {
-    console.log("logout");
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/api/v1/users/logout",
+        {}, // Empty object for data payload
+        { withCredentials: true } // Configuration object to include credentials (cookies)
+      );
+
+      toast.success("Logout successful!");
+      dispatch(removeUser());
+      navigate("/");
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Error sending OTP. Please try again.";
+      toast.error(errorMessage);
+    }
   };
 
   const user = useSelector((state) => state.auth.user);
