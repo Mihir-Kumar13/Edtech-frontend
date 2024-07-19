@@ -11,11 +11,10 @@ import { useEffect, useState } from "react";
 const App = () => {
   const { loading, error } = useCourse();
   const dispatch = useDispatch();
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(true);
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
-        setLoader(true);
         const response = await axios.post(
           "http://localhost:4000/api/v1/users/getcurrentuser",
           {},
@@ -41,7 +40,7 @@ const App = () => {
     fetchCurrentUser();
   }, [dispatch]);
 
-  return !loader ? (
+  return (
     <div className="flex flex-col min-h-screen bg-zinc-900 text-white">
       <Header />
       <main className="flex-grow mt-20 shadow-[0_4px_6px_-1px_rgba(255,255,255,0.5),_0_2px_4px_-2px_rgba(255,255,255,0.3)]">
@@ -49,7 +48,7 @@ const App = () => {
       </main>
       <Footer />
     </div>
-  ) : null;
+  );
 };
 
 export default App;
