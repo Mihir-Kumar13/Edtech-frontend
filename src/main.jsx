@@ -13,6 +13,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Provider } from "react-redux";
 import store from "./Store/store.js";
+import Protected from "./components/Protected.jsx";
 
 const router = createBrowserRouter([
   {
@@ -33,11 +34,19 @@ const router = createBrowserRouter([
       },
       {
         path: "courses",
-        element: <Courses />,
+        element: (
+          <Protected authentication={false}>
+            <Courses />
+          </Protected>
+        ),
       },
       {
         path: "login",
-        element: <Login />,
+        element: (
+          <Protected authentication={false}>
+            <Login />
+          </Protected>
+        ),
       },
       { path: "signup", element: <Signup /> },
     ],

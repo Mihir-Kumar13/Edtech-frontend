@@ -4,12 +4,15 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: null,
+    status: false,
     userprofile: null,
   },
 
   reducers: {
     addUser: (state, action) => {
       state.user = action.payload;
+      state.status = true;
+      state.user;
     },
 
     addUserProfile: (state, action) => {
@@ -18,6 +21,7 @@ const authSlice = createSlice({
 
     removeUser: (state) => {
       state.user = null;
+      state.status = false;
       state.userprofile = null;
     },
   },

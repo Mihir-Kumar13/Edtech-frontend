@@ -21,17 +21,21 @@ const LoginForm = () => {
         {
           email: email.current.value,
           password: password.current.value,
+        },
+        {
+          withCredentials: true,
         }
       );
 
       // Handle the response from the server
-      toast.success("Login successful!");
+
       dispatch(addUser(response.data.data));
       navigate("/");
+      toast.success("Login successful!");
     } catch (error) {
       // Handle errors
-      const errorMessage =
-        error.response?.data?.message || "Error sending OTP. Please try again.";
+      console.log(error);
+      const errorMessage = error.response?.data?.message;
       toast.error(errorMessage);
     }
   };

@@ -4,7 +4,8 @@ import logo from "../assets/4CxDWZ01.svg";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { removeUser } from "../Store/authSlice";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -18,9 +19,9 @@ const Header = () => {
         { withCredentials: true } // Configuration object to include credentials (cookies)
       );
 
-      toast.success("Logout successful!");
       dispatch(removeUser());
-      navigate("/");
+
+      // Add a slight delay before navigating
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "Error sending OTP. Please try again.";
@@ -60,6 +61,7 @@ const Header = () => {
           )}
         </div>
       </header>
+      <ToastContainer />
     </div>
   );
 };
