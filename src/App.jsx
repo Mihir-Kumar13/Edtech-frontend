@@ -12,6 +12,7 @@ const App = () => {
   const { loading, error } = useCourse();
   const dispatch = useDispatch();
   const [loader, setLoader] = useState(true);
+
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
@@ -27,18 +28,23 @@ const App = () => {
 
         if (user) {
           dispatch(addUser(user));
-          setLoader(false);
         } else {
           dispatch(removeUser());
         }
       } catch (error) {
         console.error("Error fetching current user:", error);
         dispatch(removeUser());
+      } finally {
+        setLoader(false);
       }
     };
 
     fetchCurrentUser();
   }, [dispatch]);
+
+  if (loader) {
+    return <div className="bg-zinc-900"></div>; // Show loader while fetching the user
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-900 text-white">

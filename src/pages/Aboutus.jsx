@@ -26,7 +26,7 @@ const Aboutus = () => {
         <img
           src={learnverseLogo}
           alt="LearnVerse Logo"
-          className="size-40 invert-color  mb-4"
+          className="size-40 invert-color mb-4"
         />
         <h1 className="text-4xl font-bold mb-6 text-center">
           About LearnVerse
@@ -71,6 +71,66 @@ const Aboutus = () => {
             </div>
           </div>
         ))}
+      </div>
+      <div className="mt-10">
+        <h2 className="text-3xl font-bold mb-4">Terms and Conditions</h2>
+        <p className="text-lg mb-4">
+          Welcome to LearnVerse. By accessing or using our services, you agree
+          to be bound by these Terms and Conditions. Our services include access
+          to a variety of educational content and resources. Users must adhere
+          to all applicable laws and regulations when using our platform. We
+          reserve the right to modify these terms at any time without prior
+          notice. Continued use of the service constitutes acceptance of the new
+          terms.
+        </p>
+
+        <h2 className="text-3xl font-bold mb-4">Privacy Policy</h2>
+        <p className="text-lg mb-4">
+          LearnVerse is committed to protecting your privacy. We collect
+          personal information such as your name, email address, and payment
+          details to provide and improve our services. This information is kept
+          secure and is not shared with third parties without your consent,
+          except as required by law. For more detailed information, please read
+          our full Privacy Policy on our website.
+        </p>
+
+        <h2 className="text-3xl font-bold mb-4">Refunds/Cancellations</h2>
+        <p className="text-lg mb-4">
+          Our refund policy is designed to ensure customer satisfaction. If you
+          are not satisfied with our services, you may request a refund within 1
+          day of purchase. Refunds are processed within 5-7 working days and
+          will be credited to your bank account. Cancellations can be made
+          through your account dashboard or by contacting our support team.
+        </p>
+
+        <h2 className="text-3xl font-bold mb-4">Pricing</h2>
+        <p className="text-lg mb-4">
+          LearnVerse offers a variety of pricing plans to suit different needs.
+          Our prices are competitive and reflect the quality of the educational
+          content provided. Detailed pricing information for each course or
+          service can be found on the respective product pages. We strive to
+          ensure transparency in our pricing and offer periodic discounts and
+          promotions.
+        </p>
+
+        <h2 className="text-3xl font-bold mb-4">Contact Us</h2>
+        <p className="text-lg mb-4">For any inquiries, please contact us at:</p>
+        <p className="text-lg mb-4">Phone: +91-8447388412</p>
+        <p className="text-lg mb-4">Email: laernverse544@gmail.com</p>
+        <p className="text-lg mb-4">
+          Address: 76 jeewan park, New Delhi, India
+        </p>
+
+        <h2 className="text-3xl font-bold mb-4">Products/Services</h2>
+        <p className="text-lg mb-4">
+          LearnVerse provides a wide range of educational products and services
+          designed to cater to learners of all ages and skill levels. Our
+          offerings include interactive online courses, downloadable study
+          materials, and live tutoring sessions. Each product and service is
+          crafted to ensure an engaging and effective learning experience.
+          Explore our course catalog to find the right educational resources for
+          your needs.
+        </p>
       </div>
     </div>
   );

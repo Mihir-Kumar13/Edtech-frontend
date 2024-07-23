@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { addUser } from "../Store/authSlice";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const email = useRef(null);
@@ -30,13 +30,18 @@ const LoginForm = () => {
       // Handle the response from the server
 
       dispatch(addUser(response.data.data));
+
       navigate("/");
-      toast.success("Login successful!");
     } catch (error) {
       // Handle errors
       console.log(error);
-      const errorMessage = error.response?.data?.message;
-      toast.error(errorMessage);
+      const errorMessage = error.response?.data?.message || "An error occurred";
+      toast.error(errorMessage, {
+        autoClose: 5000,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+      });
     }
   };
 

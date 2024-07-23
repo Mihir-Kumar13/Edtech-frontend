@@ -2,7 +2,6 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addCategories, addCourses } from "../Store/courseSlice";
 import { useEffect, useCallback, useState } from "react";
-
 const useCourse = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);

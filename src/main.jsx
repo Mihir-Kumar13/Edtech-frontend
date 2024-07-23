@@ -14,6 +14,13 @@ import "slick-carousel/slick/slick-theme.css";
 import { Provider } from "react-redux";
 import store from "./Store/store.js";
 import Protected from "./components/Protected.jsx";
+import Coursepage from "./pages/Coursepage.jsx";
+import Buycourse from "./pages/Buycourse.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import Myprofile from "./pages/Myprofile.jsx";
+import Settings from "./pages/Settings.jsx";
+import Enrolledcourses from "./pages/Enrolledcourses.jsx";
+import Mycourses from "./pages/Mycourses.jsx";
 
 const router = createBrowserRouter([
   {
@@ -25,20 +32,49 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
+        path: "buy-course/:id",
+        element: (
+          <Protected authentication={true}>
+            <Buycourse />
+          </Protected>
+        ),
+      },
+      {
         path: "about",
         element: <Aboutus />,
       },
+      {
+        path: "dashboard",
+        element: (
+          <Protected authentication={true}>
+            <Dashboard />
+          </Protected>
+        ),
+        children: [
+          { path: "myprofile", element: <Myprofile /> },
+          {
+            path: "setting",
+            element: <Settings />,
+          },
+          { path: "mycourses", element: <Mycourses /> },
+          {
+            path: "enrolledcourses",
+            element: <Enrolledcourses />,
+          },
+        ],
+      },
+
       {
         path: "contact",
         element: <Contactus />,
       },
       {
         path: "courses",
-        element: (
-          <Protected authentication={false}>
-            <Courses />
-          </Protected>
-        ),
+        element: <Courses />,
+      },
+      {
+        path: "courses/:id", // Add dynamic route for course details
+        element: <Coursepage />,
       },
       {
         path: "login",
@@ -48,15 +84,20 @@ const router = createBrowserRouter([
           </Protected>
         ),
       },
-      { path: "signup", element: <Signup /> },
+      {
+        path: "signup",
+        element: (
+          <Protected authentication={false}>
+            <Signup />
+          </Protected>
+        ),
+      },
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    <RouterProvider router={router}>
-      <App />
-    </RouterProvider>
+    <RouterProvider router={router} />
   </Provider>
 );
