@@ -21,6 +21,7 @@ import Myprofile from "./pages/Myprofile.jsx";
 import Settings from "./pages/Settings.jsx";
 import Enrolledcourses from "./pages/Enrolledcourses.jsx";
 import Mycourses from "./pages/Mycourses.jsx";
+import Addcourse from "./pages/Addcourse.jsx";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,7 @@ const router = createBrowserRouter([
             path: "enrolledcourses",
             element: <Enrolledcourses />,
           },
+          { path: "addcourse", element: <Addcourse /> },
         ],
       },
 

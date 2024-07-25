@@ -65,7 +65,10 @@ const Sidebar = () => {
               <FontAwesomeIcon icon={faDesktop} className="mr-4" />
               My Courses
             </div>
-            <div className="hover:cursor-pointer hover:bg-gray-800 w-full">
+            <div
+              className="hover:cursor-pointer hover:bg-gray-800 w-full"
+              onClick={() => navigate("/dashboard/addcourse")}
+            >
               <FontAwesomeIcon icon={faPlus} className="mr-3" /> Add Course
             </div>
           </>
