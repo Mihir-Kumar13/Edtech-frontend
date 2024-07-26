@@ -60,8 +60,11 @@ const Coursepage = () => {
               <h1 className="text-3xl font-bold mb-2">{course.courseName}</h1>
               <p className="text-gray-700 mb-4">{course.courseDescription}</p>
               <p>
-                <strong>Instructor:</strong> {course.instructor.firstName}{" "}
-                {course.instructor.lastName}
+                <strong>Instructor:</strong>
+                {course.instructor.firstName.charAt(0).toUpperCase() +
+                  course.instructor.firstName.slice(1).toLowerCase()}{" "}
+                {course.instructor.lastName.charAt(0).toUpperCase() +
+                  course.instructor.lastName.slice(1).toLowerCase()}
               </p>
             </div>
           </div>
@@ -104,7 +107,7 @@ const Coursepage = () => {
 
           <div className="mt-8">
             <p>
-              <strong>Price:</strong> ${course.price}
+              <strong>Price:</strong> ₹{course.price}
             </p>
             <p>
               <strong>Ratings:</strong>{" "}
