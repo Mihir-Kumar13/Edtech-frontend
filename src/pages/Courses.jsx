@@ -131,7 +131,7 @@ const Courses = () => {
                       {course.courseDescription}
                     </p>
                     <p className="text-gray-700 mt-1">
-                      <strong>Price:</strong> ${course.price}
+                      <strong>Price:</strong> ₹{course.price}
                     </p>
                     <p className="text-gray-700 mt-1">
                       <strong>Instructor:</strong>{" "}
