@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { addUser } from "../Store/authSlice";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const email = useRef(null);
@@ -28,9 +28,7 @@ const LoginForm = () => {
       );
 
       // Handle the response from the server
-
       dispatch(addUser(response.data.data));
-
       navigate("/");
     } catch (error) {
       // Handle errors
@@ -91,10 +89,18 @@ const LoginForm = () => {
             </button>
           </div>
         </form>
-        <div className="text-sm text-center">
+        <div className="text-sm text-center space-y-2">
           <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
             Forgot your password?
           </a>
+          <p className="text-gray-400">
+            Don't have an account?{" "}
+            <Link to="/signup">
+              <p className="font-medium text-blue-600 hover:text-blue-500">
+                Sign up
+              </p>
+            </Link>
+          </p>
         </div>
       </div>
       <ToastContainer />
