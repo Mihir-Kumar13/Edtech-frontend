@@ -16,7 +16,7 @@ const useCourse = () => {
       );
 
       const categoryResponse = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/showallcategory`
+        `${import.meta.env.VITE_BACKEND_URL}/courses/showallcategory`
       );
 
       const categoryResponsedata = categoryResponse.data.data;
