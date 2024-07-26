@@ -47,7 +47,7 @@ const Courses = () => {
   return (
     <div className="mt-20">
       <h1 className="text-2xl font-bold mb-4">All Courses</h1>
-      {!courses?.length == 0 ? (
+      {courses?.length == 0 ? (
         <div className="text-3xl text-center">No courses on Website</div>
       ) : (
         <div>
