@@ -114,6 +114,7 @@ const Aboutus = () => {
         </p>
 
         <h2 className="text-3xl font-bold mb-4">Contact Us</h2>
+        <h2 className="text-3xl font-bold mb-4">BUSSINESS NAME: SIDDHANT</h2>
         <p className="text-lg mb-4">For any inquiries, please contact us at:</p>
         <p className="text-lg mb-4">Phone: +91-8447388412</p>
         <p className="text-lg mb-4">Email: laernverse544@gmail.com</p>
