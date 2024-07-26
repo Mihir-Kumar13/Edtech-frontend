@@ -17,7 +17,7 @@ const Coursepage = () => {
       setError(null);
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_BACKEND_URL}/courses/get-course`,
+          `${import.meta.env.VITE_BACKEND_URL}/courses/get-course`,
           { courseId: id }
         );
         setCourse(response.data.data);

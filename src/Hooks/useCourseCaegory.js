@@ -12,11 +12,11 @@ const useCourse = () => {
     setError(null);
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/courses/showallcourses`
+        `${import.meta.env.VITE_BACKEND_URL}/courses/showallcourses`
       );
 
       const categoryResponse = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/showallcategory`
+        `${import.meta.env.VITE_BACKEND_URL}/showallcategory`
       );
 
       const categoryResponsedata = categoryResponse.data.data;

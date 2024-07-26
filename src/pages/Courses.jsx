@@ -22,7 +22,7 @@ const Courses = () => {
       const fetchCategoryDetails = async () => {
         try {
           const response = await axios.post(
-            `${process.env.REACT_APP_BACKEND_URL}/courses/getCategoryDetails`, // Update with your actual endpoint
+            `${import.meta.env.VITE_BACKEND_URL}/courses/getCategoryDetails`, // Update with your actual endpoint
             { categoryId: selectedOption },
             { withCredentials: true }
           );

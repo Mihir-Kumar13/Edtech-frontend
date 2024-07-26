@@ -28,7 +28,7 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/users/logout`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/logout`,
         {}, // Empty object for data payload
         { withCredentials: true } // Configuration object to include credentials (cookies)
       );

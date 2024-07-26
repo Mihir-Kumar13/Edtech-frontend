@@ -17,7 +17,7 @@ const App = () => {
     const fetchCurrentUser = async () => {
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_BACKEND_URL}/users/getcurrentuser`,
+          `${import.meta.env.VITE_BACKEND_URL}/users/getcurrentuser`,
           {},
           {
             withCredentials: true,

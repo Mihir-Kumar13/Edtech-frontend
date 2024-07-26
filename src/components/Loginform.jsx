@@ -17,7 +17,7 @@ const LoginForm = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/users/login`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/login`,
         {
           email: email.current.value,
           password: password.current.value,

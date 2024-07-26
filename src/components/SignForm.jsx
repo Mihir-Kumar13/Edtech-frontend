@@ -25,7 +25,7 @@ const SignupForm = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/users/send-otp`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/send-otp`,
         { email }
       );
 
@@ -61,7 +61,7 @@ const SignupForm = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/users/register`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/register`,
         userData
       );
 
