@@ -25,7 +25,7 @@ const SignupForm = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/v1/users/send-otp",
+        `${process.env.REACT_APP_BACKEND_URL}/users/send-otp`,
         { email }
       );
 
@@ -61,7 +61,7 @@ const SignupForm = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/v1/users/register",
+        `${process.env.REACT_APP_BACKEND_URL}/users/register`,
         userData
       );
 

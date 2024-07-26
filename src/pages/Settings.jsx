@@ -34,7 +34,7 @@ const Settings = () => {
   const handleSave = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/v1/users/update-profile",
+        `${process.env.REACT_APP_BACKEND_URL}/users/update-profile`,
         userData,
         {
           withCredentials: true,
@@ -52,7 +52,7 @@ const Settings = () => {
   const handleChangePassword = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/v1/users/update-password",
+        `${process.env.REACT_APP_BACKEND_URL}/users/update-password`,
         {
           ...passwordData,
           email: userData.email,
@@ -75,7 +75,7 @@ const Settings = () => {
   const handleDeleteProfile = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/v1/users/delete-profile",
+        `${process.env.REACT_APP_BACKEND_URL}/users/delete-profile`,
         {},
         {
           withCredentials: true,

@@ -9,7 +9,7 @@ const Buycourse = () => {
     const buyCourse = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:4000/api/v1/payments/buy",
+          `${process.env.REACT_APP_BACKEND_URL}/payments/buy`,
           { courseId: id },
           { withCredentials: true }
         );

@@ -63,7 +63,7 @@ const CourseForm = () => {
       }
 
       const courseResponse = await axios.post(
-        "http://localhost:4000/api/v1/courses/create-course",
+        `${process.env.REACT_APP_BACKEND_URL}/courses/create-course`,
         formData,
         {
           withCredentials: true,
@@ -78,7 +78,7 @@ const CourseForm = () => {
 
       for (const section of sections) {
         const sectionResponse = await axios.post(
-          "http://localhost:4000/api/v1/courses/create-section",
+          `${process.env.REACT_APP_BACKEND_URL}/courses/create-section`,
           { ...section, courseId },
           {
             withCredentials: true,
@@ -95,7 +95,7 @@ const CourseForm = () => {
           (sub) => sub.sectionId === sections.indexOf(section)
         )) {
           await axios.post(
-            "http://localhost:4000/api/v1/courses/create-subsection",
+            `${process.env.REACT_APP_BACKEND_URL}/courses/create-subsection`,
             { ...subsection, sectionId },
             {
               withCredentials: true,
