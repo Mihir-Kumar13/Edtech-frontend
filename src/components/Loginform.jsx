@@ -17,7 +17,7 @@ const LoginForm = () => {
 
     try {
       const response = await axios.post(
-        `https://edtech-server-beige.vercel.app/api/v1/users/login`,
+        `${process.env.REACT_APP_BACKEND_URL}/users/login`,
         {
           email: email.current.value,
           password: password.current.value,
