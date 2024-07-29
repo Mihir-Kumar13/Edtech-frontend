@@ -8,8 +8,10 @@ const Coursepage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEnrolled, setIsEnrolled] = useState(false);
-  //console.log(id);
   const navigate = useNavigate();
+
+  const capitalize = (str) =>
+    str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
   useEffect(() => {
     const fetchCourseDetails = async () => {
@@ -35,10 +37,65 @@ const Coursepage = () => {
     fetchCourseDetails();
   }, [id]);
 
-  const handleBuyNow = () => {
-    navigate("/buy-course/" + id);
-    // Handle the buy now action
-    console.log("Redirect to purchase page or initiate purchase process.");
+  const handleBuyNow = async () => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/payments/buy`,
+        { courseId: id },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const { paymentResponse, courseName, courseDescription, thumbnail } =
+        response.data.data;
+
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: paymentResponse.amount,
+        currency: paymentResponse.currency,
+        name: courseName,
+        description: courseDescription,
+        image: thumbnail,
+        order_id: paymentResponse.id,
+        handler: async (response) => {
+          try {
+            const result = await axios.post(
+              `${import.meta.env.VITE_BACKEND_URL}/payments/verify`,
+              response,
+              { withCredentials: true }
+            );
+
+            if (result.status === 200) {
+              navigate("/success");
+            } else {
+              alert("Payment verification failed");
+            }
+          } catch (error) {
+            console.error("Error verifying payment:", error);
+            alert("Error verifying payment");
+          }
+        },
+        prefill: {
+          name: "User Name", // Replace with actual user data
+          email: "user@example.com", // Replace with actual user data
+        },
+        notes: {
+          courseId: id,
+        },
+        theme: {
+          color: "#F37254",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error("Error during payment process:", error);
+    }
   };
 
   if (loading) return <div className="text-center py-20">Loading...</div>;
@@ -46,7 +103,7 @@ const Coursepage = () => {
     return <div className="text-center py-20 text-red-500">Error: {error}</div>;
 
   return (
-    <div className="w-[80%] mx-auto py-4 my-20  ">
+    <div className="w-[80%] mx-auto py-4 my-20">
       <h1 className="text-4xl font-bold text-center mb-10">Course Detail</h1>
       {course ? (
         <div className="container mx-auto p-4 shadow-md rounded-lg">
@@ -60,11 +117,8 @@ const Coursepage = () => {
               <h1 className="text-3xl font-bold mb-2">{course.courseName}</h1>
               <p className="text-gray-700 mb-4">{course.courseDescription}</p>
               <p>
-                <strong>Instructor:</strong>
-                {course.instructor.firstName.charAt(0).toUpperCase() +
-                  course.instructor.firstName.slice(1).toLowerCase()}{" "}
-                {course.instructor.lastName.charAt(0).toUpperCase() +
-                  course.instructor.lastName.slice(1).toLowerCase()}
+                <strong>Instructor:</strong>{" "}
+                {`${capitalize(course.instructor.firstName)} ${capitalize(course.instructor.lastName)}`}
               </p>
             </div>
           </div>

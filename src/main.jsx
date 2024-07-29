@@ -1,27 +1,29 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./pages/Home.jsx";
-import Aboutus from "./pages/Aboutus.jsx";
-import Contactus from "./pages/Contactus.jsx";
-import Courses from "./pages/Courses.jsx";
-import Login from "./pages/Login.jsx";
-import Signup from "./pages/Signup.jsx";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Provider } from "react-redux";
 import store from "./Store/store.js";
 import Protected from "./components/Protected.jsx";
-import Coursepage from "./pages/Coursepage.jsx";
-import Buycourse from "./pages/Buycourse.jsx";
-import Dashboard from "./pages/Dashboard.jsx";
-import Myprofile from "./pages/Myprofile.jsx";
-import Settings from "./pages/Settings.jsx";
-import Enrolledcourses from "./pages/Enrolledcourses.jsx";
-import Mycourses from "./pages/Mycourses.jsx";
-import Addcourse from "./pages/Addcourse.jsx";
+
+// Lazy load the components
+const Home = lazy(() => import("./pages/Home.jsx"));
+const Aboutus = lazy(() => import("./pages/Aboutus.jsx"));
+const Contactus = lazy(() => import("./pages/Contactus.jsx"));
+const Courses = lazy(() => import("./pages/Courses.jsx"));
+const Login = lazy(() => import("./pages/Login.jsx"));
+const Signup = lazy(() => import("./pages/Signup.jsx"));
+const Coursepage = lazy(() => import("./pages/Coursepage.jsx"));
+const Buycourse = lazy(() => import("./pages/Buycourse.jsx"));
+const Dashboard = lazy(() => import("./pages/Dashboard.jsx"));
+const Myprofile = lazy(() => import("./pages/Myprofile.jsx"));
+const Settings = lazy(() => import("./pages/Settings.jsx"));
+const Enrolledcourses = lazy(() => import("./pages/Enrolledcourses.jsx"));
+const Mycourses = lazy(() => import("./pages/Mycourses.jsx"));
+const Addcourse = lazy(() => import("./pages/Addcourse.jsx"));
 
 const router = createBrowserRouter([
   {
@@ -30,59 +32,113 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <Home />
+          </Suspense>
+        ),
       },
       {
         path: "buy-course/:id",
         element: (
           <Protected authentication={true}>
-            <Buycourse />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Buycourse />
+            </Suspense>
           </Protected>
         ),
       },
       {
         path: "about",
-        element: <Aboutus />,
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <Aboutus />
+          </Suspense>
+        ),
       },
       {
         path: "dashboard",
         element: (
           <Protected authentication={true}>
-            <Dashboard />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Dashboard />
+            </Suspense>
           </Protected>
         ),
         children: [
-          { path: "myprofile", element: <Myprofile /> },
+          {
+            path: "myprofile",
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Myprofile />
+              </Suspense>
+            ),
+          },
           {
             path: "setting",
-            element: <Settings />,
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Settings />
+              </Suspense>
+            ),
           },
-          { path: "mycourses", element: <Mycourses /> },
+          {
+            path: "mycourses",
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Mycourses />
+              </Suspense>
+            ),
+          },
           {
             path: "enrolledcourses",
-            element: <Enrolledcourses />,
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Enrolledcourses />
+              </Suspense>
+            ),
           },
-          { path: "addcourse", element: <Addcourse /> },
+          {
+            path: "addcourse",
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Addcourse />
+              </Suspense>
+            ),
+          },
         ],
       },
-
       {
         path: "contact",
-        element: <Contactus />,
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <Contactus />
+          </Suspense>
+        ),
       },
       {
         path: "courses",
-        element: <Courses />,
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <Courses />
+          </Suspense>
+        ),
       },
       {
         path: "courses/:id", // Add dynamic route for course details
-        element: <Coursepage />,
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <Coursepage />
+          </Suspense>
+        ),
       },
       {
         path: "login",
         element: (
           <Protected authentication={false}>
-            <Login />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Login />
+            </Suspense>
           </Protected>
         ),
       },
@@ -90,7 +146,9 @@ const router = createBrowserRouter([
         path: "signup",
         element: (
           <Protected authentication={false}>
-            <Signup />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Signup />
+            </Suspense>
           </Protected>
         ),
       },

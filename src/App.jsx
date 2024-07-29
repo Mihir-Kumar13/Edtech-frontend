@@ -43,7 +43,9 @@ const App = () => {
   }, [dispatch]);
 
   if (loader) {
-    return <div className="bg-zinc-900"></div>; // Show loader while fetching the user
+    return (
+      <div className="bg-zinc-900 min-h-screen text-6xl text-red-500"> </div>
+    ); // Show loader while fetching the user
   }
 
   return (
