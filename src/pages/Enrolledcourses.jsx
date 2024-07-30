@@ -6,7 +6,6 @@ import { useNavigate } from "react-router";
 import { fetchCurrentUser } from "../constants";
 
 const Enrolledcourses = () => {
-  const [loader, setLoader] = useState(true);
   useEffect(() => {
     fetchCurrentUser();
   }, []);
