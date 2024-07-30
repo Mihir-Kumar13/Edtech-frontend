@@ -11,14 +11,15 @@ const Courses = () => {
     navigate(`/courses/${courseId}`);
   };
 
-  const userCourses = useSelector((state) => state.auth.user.courses);
+  const user = useSelector((state) => state.auth.user);
+  const userCourses = user?.courses;
 
   const courses = useSelector((state) => state.course.courses);
 
   console.log(userCourses);
-  console.log(courses);
+  //console.log(courses);
   const filteredCourses = courses?.filter(
-    (course) => !userCourses.includes(course?._id)
+    (course) => !userCourses?.includes(course?._id)
   );
 
   ///courses
