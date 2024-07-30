@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import axios from "axios";
-import { addUser, removeUser } from "./Store/authSlice";
+import { Navigate, Outlet } from "react-router";
+import "./App.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import useCourse from "./Hooks/useCourseCaegory";
-import { Outlet } from "react-router";
-import "./App.css";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addUser, removeUser } from "./Store/authSlice";
+import { useEffect, useState } from "react";
 
-const App = ({ addUser, removeUser }) => {
+const App = () => {
   const { loading, error } = useCourse();
+  const dispatch = useDispatch();
   const [loader, setLoader] = useState(true);
 
   useEffect(() => {
@@ -26,20 +27,20 @@ const App = ({ addUser, removeUser }) => {
         const user = response.data?.data;
 
         if (user) {
-          addUser(user);
+          dispatch(addUser(user));
         } else {
-          removeUser();
+          dispatch(removeUser());
         }
       } catch (error) {
         console.error("Error fetching current user:", error);
-        removeUser();
+        dispatch(removeUser());
       } finally {
         setLoader(false);
       }
     };
 
     fetchCurrentUser();
-  }, [addUser, removeUser]);
+  }, [dispatch]);
 
   if (loader) {
     return (
@@ -58,9 +59,4 @@ const App = ({ addUser, removeUser }) => {
   );
 };
 
-const mapDispatchToProps = {
-  addUser,
-  removeUser,
-};
-
-export default connect(null, mapDispatchToProps)(App);
+export default App;
