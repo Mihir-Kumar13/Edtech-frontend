@@ -21,7 +21,7 @@ const Enrolledcourses = () => {
 
   // Filter courses to only include those that match the enrolled course IDs
   const enrolledCourses = courses?.filter((course) =>
-    enrolledCourseIds.includes(course._id)
+    enrolledCourseIds?.includes(course._id)
   );
 
   console.log(enrolledCourses);
@@ -31,7 +31,7 @@ const Enrolledcourses = () => {
         <div className="text-6xl">No courses enrolled</div>
       ) : (
         <div className="text-white grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {enrolledCourses.map((course, index) => (
+          {enrolledCourses?.map((course, index) => (
             <Coursecard
               key={index}
               course={course}
