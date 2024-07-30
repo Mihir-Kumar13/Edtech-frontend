@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { capitalize } from "../constants";
+import { capitalize, fetchCurrentUser } from "../constants";
 
 const Coursepage = () => {
   const { id } = useParams();
@@ -45,7 +45,9 @@ const Coursepage = () => {
       const countdown = setInterval(() => {
         setTimer((prev) => {
           if (prev <= 1) {
+            fetchCurrentUser();
             clearInterval(countdown);
+
             navigate(`/dashboard/enrolledcourses`);
             return 0;
           }
