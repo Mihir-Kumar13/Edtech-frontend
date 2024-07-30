@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { capitalize } from "../constants";
 
 const Coursepage = () => {
   const { id } = useParams();
@@ -10,8 +12,7 @@ const Coursepage = () => {
   const [isEnrolled, setIsEnrolled] = useState(false);
   const navigate = useNavigate();
 
-  const capitalize = (str) =>
-    str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     const fetchCourseDetails = async () => {
@@ -61,27 +62,10 @@ const Coursepage = () => {
         description: courseDescription,
         image: thumbnail,
         order_id: paymentResponse.id,
-        handler: async (response) => {
-          try {
-            const result = await axios.post(
-              `${import.meta.env.VITE_BACKEND_URL}/payments/verify`,
-              response,
-              { withCredentials: true }
-            );
 
-            if (result.status === 200) {
-              navigate("/success");
-            } else {
-              alert("Payment verification failed");
-            }
-          } catch (error) {
-            console.error("Error verifying payment:", error);
-            alert("Error verifying payment");
-          }
-        },
         prefill: {
-          name: "User Name", // Replace with actual user data
-          email: "user@example.com", // Replace with actual user data
+          name: capitalize(user.firstName) + capitalize(user.lastName), // Replace with actual user data
+          email: user.email, // Replace with actual user data
         },
         notes: {
           courseId: id,

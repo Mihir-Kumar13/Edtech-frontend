@@ -4,9 +4,24 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Coursecard from "../components/Coursecard";
 
 const Courses = () => {
+  const handleCourseClick = (courseId) => {
+    navigate(`/courses/${courseId}`);
+  };
+
+  const userCourses = useSelector((state) => state.auth.user.courses);
+
   const courses = useSelector((state) => state.course.courses);
+
+  console.log(userCourses);
+  console.log(courses);
+  const filteredCourses = courses?.filter(
+    (course) => !userCourses.includes(course?._id)
+  );
+
+  ///courses
   const category = useSelector((state) => state.course.categories);
 
   const [selectedOption, setSelectedOption] = useState("");
@@ -39,10 +54,6 @@ const Courses = () => {
       fetchCategoryDetails();
     }
   }, [selectedOption]);
-
-  const handleCourseClick = (courseId) => {
-    navigate(`/courses/${courseId}`);
-  };
 
   return (
     <div className="mt-20">
@@ -77,70 +88,26 @@ const Courses = () => {
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {categoryDetails.allCourses &&
-                  categoryDetails.allCourses.map((course) => (
-                    <div
-                      key={course._id}
-                      className="border rounded-lg p-4 shadow-lg cursor-pointer"
-                      onClick={() => handleCourseClick(course._id)}
-                    >
-                      <img
-                        src={course.thumbnail}
-                        alt={course.courseName}
-                        className="w-full h-48 object-cover rounded"
+                  categoryDetails.allCourses
+                    ?.filter((course) => !userCourses.includes(course?._id))
+                    .map((course, index) => (
+                      <Coursecard
+                        key={index}
+                        course={course}
+                        onClick={handleCourseClick}
                       />
-                      <h2 className="text-xl font-semibold mt-2">
-                        {course.courseName}
-                      </h2>
-                      <p className="text-gray-700 mt-1">
-                        {course.courseDescription}
-                      </p>
-                      <p className="text-gray-700 mt-1">
-                        <strong>Price:</strong> ₹{course.price}
-                      </p>
-                      <p className="text-gray-700 mt-1">
-                        <strong>Instructor:</strong>{" "}
-                        {course.instructor.firstName.charAt(0).toUpperCase() +
-                          course.instructor.firstName
-                            .slice(1)
-                            .toLowerCase()}{" "}
-                        {course.instructor.lastName.charAt(0).toUpperCase() +
-                          course.instructor.lastName.slice(1).toLowerCase()}
-                      </p>
-                    </div>
-                  ))}
+                    ))}
               </div>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {courses &&
-                courses.map((course) => (
-                  <div
-                    key={course._id}
-                    className="border rounded-lg p-4 shadow-lg cursor-pointer"
-                    onClick={() => handleCourseClick(course._id)}
-                  >
-                    <img
-                      src={course.thumbnail}
-                      alt={course.courseName}
-                      className="w-full h-48 object-cover rounded"
-                    />
-                    <h2 className="text-xl font-semibold mt-2">
-                      {course.courseName}
-                    </h2>
-                    <p className="text-gray-700 mt-1">
-                      {course.courseDescription}
-                    </p>
-                    <p className="text-gray-700 mt-1">
-                      <strong>Price:</strong> ₹{course.price}
-                    </p>
-                    <p className="text-gray-700 mt-1">
-                      <strong>Instructor:</strong>{" "}
-                      {course.instructor.firstName.charAt(0).toUpperCase() +
-                        course.instructor.firstName.slice(1).toLowerCase()}{" "}
-                      {course.instructor.lastName.charAt(0).toUpperCase() +
-                        course.instructor.lastName.slice(1).toLowerCase()}
-                    </p>
-                  </div>
+                filteredCourses.map((course, index) => (
+                  <Coursecard
+                    key={index}
+                    course={course}
+                    onClick={handleCourseClick}
+                  />
                 ))}
             </div>
           )}
