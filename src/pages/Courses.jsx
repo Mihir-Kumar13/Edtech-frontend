@@ -90,7 +90,7 @@ const Courses = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {categoryDetails.allCourses &&
                   categoryDetails.allCourses
-                    ?.filter((course) => !userCourses.includes(course?._id))
+                    ?.filter((course) => !userCourses?.includes(course?._id))
                     .map((course, index) => (
                       <Coursecard
                         key={index}

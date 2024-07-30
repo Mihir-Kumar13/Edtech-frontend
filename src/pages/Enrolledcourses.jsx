@@ -16,7 +16,7 @@ const Enrolledcourses = () => {
   const courses = useSelector((state) => state.course.courses);
 
   // Filter courses to only include those that match the enrolled course IDs
-  const enrolledCourses = courses.filter((course) =>
+  const enrolledCourses = courses?.filter((course) =>
     enrolledCourseIds.includes(course._id)
   );
 
