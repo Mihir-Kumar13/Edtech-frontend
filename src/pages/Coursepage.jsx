@@ -60,6 +60,10 @@ const Coursepage = () => {
 
   const handleBuyNow = async () => {
     try {
+      if (!user) {
+        navigate("/login");
+      }
+
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/payments/buy`,
         { courseId: id },
