@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import Coursecard from "../components/Coursecard";
 
 import { useNavigate } from "react-router";
+import { fetchCurrentUser } from "../constants";
 
 const Enrolledcourses = () => {
+  const [loader, setLoader] = useState(true);
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
   const navigate = useNavigate();
   const handleCourseClick = (courseId) => {
     navigate(`/courses/${courseId}`);
