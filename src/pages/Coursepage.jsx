@@ -45,7 +45,6 @@ const Coursepage = () => {
       const countdown = setInterval(() => {
         setTimer((prev) => {
           if (prev <= 1) {
-            fetchCurrentUser();
             clearInterval(countdown);
 
             navigate(`/dashboard/enrolledcourses`);
