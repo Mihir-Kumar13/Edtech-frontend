@@ -10,6 +10,8 @@ const Coursepage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEnrolled, setIsEnrolled] = useState(false);
+  const [redirecting, setRedirecting] = useState(false);
+  const [timer, setTimer] = useState(15); // 15 seconds timer
   const navigate = useNavigate();
 
   const user = useSelector((state) => state.auth.user);
@@ -38,6 +40,23 @@ const Coursepage = () => {
     fetchCourseDetails();
   }, [id]);
 
+  useEffect(() => {
+    if (redirecting) {
+      const countdown = setInterval(() => {
+        setTimer((prev) => {
+          if (prev <= 1) {
+            clearInterval(countdown);
+            navigate(`/dashboard/enrolledcourses`);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(countdown); // Cleanup interval on component unmount
+    }
+  }, [redirecting, navigate]);
+
   const handleBuyNow = async () => {
     try {
       const response = await axios.post(
@@ -64,14 +83,22 @@ const Coursepage = () => {
         order_id: paymentResponse.id,
 
         prefill: {
-          name: capitalize(user.firstName) + capitalize(user.lastName), // Replace with actual user data
-          email: user.email, // Replace with actual user data
+          name: capitalize(user.firstName) + capitalize(user.lastName),
+          email: user.email,
         },
         notes: {
           courseId: id,
         },
         theme: {
           color: "#F37254",
+        },
+        handler: function () {
+          setRedirecting(true);
+        },
+        modal: {
+          ondismiss: function () {
+            console.log("Payment modal closed");
+          },
         },
       };
 
@@ -167,6 +194,11 @@ const Coursepage = () => {
               >
                 Buy Now
               </button>
+            )}
+            {redirecting && (
+              <div className="mt-4 text-center text-white">
+                <p>Redirecting you in {timer} seconds...</p>
+              </div>
             )}
           </div>
         </div>
