@@ -27,7 +27,7 @@ const Enrolledcourses = () => {
   console.log(enrolledCourses);
   return (
     <div className="items-start">
-      {enrolledCourses.length === 0 ? (
+      {enrolledCourses?.length === 0 ? (
         <div className="text-6xl">No courses enrolled</div>
       ) : (
         <div className="text-white grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
