@@ -1,28 +1,15 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Coursecard from "../components/Coursecard";
-
 import { useNavigate } from "react-router";
-import { fetchCurrentUser } from "../constants";
 
 const Enrolledcourses = () => {
-  useEffect(() => {
-    fetchCurrentUser();
-  }, []);
   const navigate = useNavigate();
   const handleCourseClick = (courseId) => {
     navigate(`/courses/${courseId}`);
   };
   const user = useSelector((state) => state.auth.user);
-  const enrolledCourseIds = user.courses;
-
-  // Get all courses from the Redux store
-  const courses = useSelector((state) => state.course.courses);
-
-  // Filter courses to only include those that match the enrolled course IDs
-  const enrolledCourses = courses?.filter((course) =>
-    enrolledCourseIds?.includes(course._id)
-  );
+  const enrolledCourses = user.courses;
 
   console.log(enrolledCourses);
   return (

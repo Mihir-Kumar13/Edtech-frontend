@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import FirstSection from "../coursebuilder/FirstSection";
+import SecondSection from "../coursebuilder/SecondSection";
 
 const CourseForm = () => {
   const [selectedOption, setSelectedOption] = useState("");
@@ -161,137 +163,18 @@ const CourseForm = () => {
   return (
     <div className=" w-[75%] text-white mx-auto">
       {state === 1 && (
-        <div className="flex flex-col gap-4 w-[60%] mx-auto">
-          <h1 className="text-2xl font-bold">Create a Course</h1>
-          <input
-            className="bg-zinc-700 w-full px-2 py-2 rounded-md mt-2"
-            name="courseName"
-            placeholder="Course Name"
-            value={course.courseName}
-            onChange={handleCourseChange}
-          />
-          <input
-            className="bg-zinc-700 w-full px-2 py-2 rounded-md mt-2"
-            name="courseDescription"
-            placeholder="Course Description"
-            value={course.courseDescription}
-            onChange={handleCourseChange}
-          />
-          <input
-            className="bg-zinc-700 w-full px-2 py-2 rounded-md mt-2"
-            name="whatYouWillLearn"
-            placeholder="What You Will Learn"
-            value={course.whatYouWillLearn}
-            onChange={handleCourseChange}
-          />
-          <input
-            className="bg-zinc-700 w-full px-2 py-2 rounded-md mt-2"
-            name="price"
-            placeholder="Price"
-            value={course.price}
-            onChange={handleCourseChange}
-          />
-          <div>
-            <select
-              className="bg-zinc-700 w-full px-2 py-2 rounded-md mt-2"
-              value={selectedOption}
-              onChange={handleChange}
-            >
-              <option value="">Select an option</option>
-              {category &&
-                category.map((cat) => (
-                  <option key={cat._id} value={cat._id}>
-                    {cat.name}
-                  </option>
-                ))}
-            </select>
-          </div>
-
-          <input
-            className="bg-zinc-700 w-full px-2 py-2 rounded-md mt-2"
-            type="file"
-            name="thumbnail"
-            onChange={handleThumbnailChange}
-          />
-          <button
-            className="  w-1/6 mr-4 text-lg bg-blue-500 rounded-md hover:bg-blue-700 text-white font-bold my-4 py-2 px-4 space-x-2"
-            onClick={() => setState(2)}
-          >
-            Next
-          </button>
-        </div>
+        <FirstSection
+          handleThumbnailChange={handleThumbnailChange}
+          handleCourseChange={handleCourseChange}
+          handleChange={handleChange}
+          setState={setState}
+          course={course}
+          selectedOption={selectedOption}
+          category={category}
+        />
       )}
 
-      {state === 2 && (
-        <div className=" w-[75%] text-white mx-auto ">
-          <h2>Sections</h2>
-          {sections.map((section, index) => (
-            <div key={index}>
-              <h1>{`Section ${index + 1}`}</h1>
-              <input
-                className="bg-zinc-700 w-full px-2 py-2 rounded-md mt-2"
-                name="sectionName"
-                placeholder={`Section ${index + 1}`}
-                value={section.sectionName}
-                onChange={(e) => handleSectionChange(index, e)}
-              />
-              <button
-                className="  px-2  text-lg bg-blue-500 rounded-md hover:bg-blue-700 text-white font-bold my-4 py-2  "
-                onClick={() => addSubsection(index)}
-              >
-                Add Subsection
-              </button>
-              {subsections
-                .filter((sub) => sub.sectionId === index)
-                .map((subsection, subIndex) => (
-                  <div key={subIndex}>
-                    <h1>{`Subsection ${subIndex + 1}`}</h1>
-                    <input
-                      className="bg-zinc-700 w-full px-2 py-2 rounded-md mt-2"
-                      name="title"
-                      placeholder="Subsection Title"
-                      value={subsection.title}
-                      onChange={(e) => handleSubsectionChange(subIndex, e)}
-                    />
-                    <input
-                      className="bg-zinc-700 w-full px-2 py-2 rounded-md mt-2"
-                      name="description"
-                      placeholder="Subsection Description"
-                      value={subsection.description}
-                      onChange={(e) => handleSubsectionChange(subIndex, e)}
-                    />
-                    <input
-                      className="bg-zinc-700 w-full px-2 py-2 rounded-md mt-2"
-                      type="file"
-                      name="videoFile"
-                      onChange={(e) => handleVideoChange(subIndex, e)}
-                    />
-                  </div>
-                ))}
-              <hr className="h-1 bg-white mt-2" />
-            </div>
-          ))}
-
-          <button
-            className="   mr-4 text-lg bg-blue-500 rounded-md hover:bg-blue-700 text-white font-bold my-4 py-2 px-4 space-x-2"
-            onClick={addSection}
-          >
-            Add Section
-          </button>
-          <button
-            className="  w-1/6 mr-4 text-lg bg-blue-500 rounded-md hover:bg-blue-700 text-white font-bold my-4 py-2 px-4 space-x-2"
-            onClick={() => setState(1)}
-          >
-            Previous
-          </button>
-          <button
-            className="  w-1/6 mr-4 text-lg bg-blue-500 rounded-md hover:bg-blue-700 text-white font-bold my-4 py-2 px-4 space-x-2"
-            onClick={() => setState(3)}
-          >
-            Next
-          </button>
-        </div>
-      )}
+      {state === 2 && <SecondSection />}
 
       {state === 3 && (
         <div>

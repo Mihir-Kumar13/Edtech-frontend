@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { capitalize, fetchCurrentUser } from "../constants";
+import { capitalize } from "../constants"; // removed fetchCurrentUser as it is not used
 
 const Coursepage = () => {
   const { id } = useParams();
@@ -13,6 +13,7 @@ const Coursepage = () => {
   const [redirecting, setRedirecting] = useState(false);
   const [timer, setTimer] = useState(15); // 15 seconds timer
   const navigate = useNavigate();
+  console.log(isEnrolled);
 
   const user = useSelector((state) => state.auth.user);
 
@@ -26,10 +27,6 @@ const Coursepage = () => {
           { courseId: id }
         );
         setCourse(response.data.data);
-        // Check if user is enrolled (dummy check here, replace with real check)
-        setIsEnrolled(
-          response.data.data.studentsEnrolled.includes("currentUserId")
-        );
       } catch (error) {
         setError(error.response ? error.response.data.message : error.message);
       } finally {
@@ -39,6 +36,14 @@ const Coursepage = () => {
 
     fetchCourseDetails();
   }, [id]);
+  console.log(course);
+
+  useEffect(() => {
+    if (course && user) {
+      const isUserEnrolled = course.studentsEnrolled.includes(user._id);
+      setIsEnrolled(isUserEnrolled);
+    }
+  }, [course, user]);
 
   useEffect(() => {
     if (redirecting) {
@@ -46,7 +51,6 @@ const Coursepage = () => {
         setTimer((prev) => {
           if (prev <= 1) {
             clearInterval(countdown);
-
             navigate(`/dashboard/enrolledcourses`);
             return 0;
           }
@@ -62,6 +66,7 @@ const Coursepage = () => {
     try {
       if (!user) {
         navigate("/login");
+        return;
       }
 
       const response = await axios.post(
@@ -86,7 +91,6 @@ const Coursepage = () => {
         description: courseDescription,
         image: thumbnail,
         order_id: paymentResponse.id,
-
         prefill: {
           name: capitalize(user.firstName) + capitalize(user.lastName),
           email: user.email,
@@ -119,92 +123,57 @@ const Coursepage = () => {
     return <div className="text-center py-20 text-red-500">Error: {error}</div>;
 
   return (
-    <div className="w-[80%] mx-auto py-4 my-20">
-      <h1 className="text-4xl font-bold text-center mb-10">Course Detail</h1>
+    <div className="w-[80%] mx-auto py-4 my-20 ">
+      <h1 className="md:text-4xl font-bold text-center ">Course Detail</h1>
       {course ? (
-        <div className="container mx-auto p-4 shadow-md rounded-lg">
-          <div className="flex flex-col md:flex-row">
-            <img
-              src={course.thumbnail}
-              alt={`${course.courseName} Thumbnail`}
-              className="w-full md:w-1/3 rounded-lg shadow-md object-cover"
-            />
-            <div className="md:ml-8 mt-4 md:mt-0">
-              <h1 className="text-3xl font-bold mb-2">{course.courseName}</h1>
-              <p className="text-gray-700 mb-4">{course.courseDescription}</p>
-              <p>
-                <strong>Instructor:</strong>{" "}
-                {`${capitalize(course.instructor.firstName)} ${capitalize(course.instructor.lastName)}`}
+        <div className="container mx-auto shadow-md rounded-lg relative ">
+          <div className=" flex flex-col md:flex-row justify-between bg-zinc-700">
+            <div className=" mt-4 p-4">
+              <h1 className="text-4xl font-bold mb-3">{course.courseName}</h1>
+              <h5 className="text-lg font-semibold">
+                Ratings: {course?.ratings}
+              </h5>
+
+              <p className="mt-2">
+                <strong>Price:{course.price}</strong>
               </p>
             </div>
+            <div className=" p-2">
+              <img
+                src={course.thumbnail}
+                className="rounded-md size-56 mx-auto "
+              />
+            </div>
           </div>
+          <div className="bg-zinc-700 p-4 mt-4 flex flex-col md:flex-row items-center justify-between">
+            <div className="md:text-lg mt-2">
+              <h2>About Course :{course.courseDescription}</h2>
 
-          <div className="mt-8">
-            <h2 className="text-2xl font-bold mb-4">Course Content</h2>
-            <ul>
-              {course.courseContent.map((section, index) => (
-                <li key={index} className="mb-6">
-                  <h3 className="text-xl font-semibold mb-2">
-                    {section.sectionName}
-                  </h3>
-                  <ul className="pl-4">
-                    {section.subSection.map((subSection, subIndex) => (
-                      <li key={subIndex} className="mb-4">
-                        <h4 className="text-lg font-medium">
-                          {subSection.title}
-                        </h4>
-                        <p className="text-gray-600">
-                          {subSection.description}
-                        </p>
-                        <p className="text-gray-600">
-                          Duration: {subSection.timeduration} minutes
-                        </p>
-                        <a
-                          href={subSection.videoUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-500 underline"
-                        >
-                          Watch Video
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              ))}
-            </ul>
+              <h2>
+                Instructor:
+                {capitalize(course.instructor.firstName) +
+                  " " +
+                  capitalize(course.instructor.lastName)}
+              </h2>
+            </div>
+
+            <div className="">
+              {!isEnrolled ? (
+                <button
+                  onClick={() => handleBuyNow()}
+                  className=" mr-4 md:text-lg bg-blue-500 rounded-md hover:bg-blue-700 text-white font-bold my-4 py-2 px-4 space-x-2"
+                >
+                  {" "}
+                  Buy Now
+                </button>
+              ) : null}
+            </div>
           </div>
-
-          <div className="mt-8">
-            <p>
-              <strong>Price:</strong> ₹{course.price}
-            </p>
-            <p>
-              <strong>Ratings:</strong>{" "}
-              {course.ratings.length > 0
-                ? (
-                    course.ratings.reduce((acc, rating) => acc + rating, 0) /
-                    course.ratings.length
-                  ).toFixed(1)
-                : "No ratings yet"}
-            </p>
-            <p>
-              <strong>Students Enrolled:</strong>{" "}
-              {course.studentsEnrolled.length}
-            </p>
-            {!isEnrolled && (
-              <button
-                onClick={handleBuyNow}
-                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
-              >
-                Buy Now
-              </button>
-            )}
-            {redirecting && (
-              <div className="mt-4 text-center text-white">
-                <p>Redirecting you in {timer} seconds...</p>
-              </div>
-            )}
+          <div className=" bg-zinc-700 p-4 mt-4">
+            <h1 className=" md:text-5xl font-bold ">Course Module</h1>
+            {course?.courseContent?.map((content) => (
+              <div className=" mx-auto mt-4 "> {content.sectionName} </div>
+            ))}
           </div>
         </div>
       ) : (
