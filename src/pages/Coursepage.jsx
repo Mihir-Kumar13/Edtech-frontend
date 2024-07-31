@@ -134,9 +134,11 @@ const Coursepage = () => {
                 Ratings: {course?.ratings}
               </h5>
 
-              <p className="mt-2">
-                <strong>Price:{course.price}</strong>
-              </p>
+              {!isEnrolled ? (
+                <p className="mt-2">
+                  <strong>Price:{course.price}</strong>
+                </p>
+              ) : null}
             </div>
             <div className=" p-2">
               <img
@@ -147,8 +149,7 @@ const Coursepage = () => {
           </div>
           <div className="bg-zinc-700 p-4 mt-4 flex flex-col md:flex-row items-center justify-between">
             <div className="md:text-lg mt-2">
-              <h2>About Course :{course.courseDescription}</h2>
-
+              {!isEnrolled && <h2>About Course :{course.courseDescription}</h2>}
               <h2>
                 Instructor:
                 {capitalize(course.instructor.firstName) +

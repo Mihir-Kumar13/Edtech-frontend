@@ -2,7 +2,7 @@ import React from "react";
 import { capitalize } from "../constants";
 
 const Coursecard = ({ course, onClick }) => {
-  //console.log(course);
+  console.log(course);
   return (
     <div
       onClick={() => onClick(course._id)}
