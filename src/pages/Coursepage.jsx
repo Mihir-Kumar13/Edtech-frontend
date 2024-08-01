@@ -103,7 +103,7 @@ const Coursepage = () => {
           color: "#F37254",
         },
         handler: function () {
-          navigate(0);
+          fetchCourseDetails();
         },
         modal: {
           ondismiss: function () {
