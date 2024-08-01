@@ -6,6 +6,7 @@ import FirstSection from "../coursebuilder/FirstSection";
 import SecondSection from "../coursebuilder/SecondSection";
 
 const CourseForm = () => {
+  const [courseid, setCourseId] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   const [course, setCourse] = useState({
     courseName: "",
@@ -88,6 +89,7 @@ const CourseForm = () => {
     setSubsections(updatedSubsections);
   };
   const [error, setError] = useState(null);
+  console.log(courseid);
 
   const createCourse = async () => {
     try {
@@ -98,7 +100,7 @@ const CourseForm = () => {
         formData.append(key, course[key]);
       }
       formData.append("category", selectedOption);
-      formData.append("isPublished", published);
+
       const courseResponse = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/courses/create-course`,
         formData,
@@ -110,47 +112,14 @@ const CourseForm = () => {
         }
       );
 
-      const courseData = courseResponse.data.data;
+      setCourseId(courseResponse.data.data._id);
 
-      const courseId = courseData._id;
-
-      for (const section of sections) {
-        //  console.log(section);
-        const sectionResponse = await axios.post(
-          `${import.meta.env.VITE_BACKEND_URL}/courses/create-section`,
-          { ...section, courseId },
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        const sectionData = sectionResponse.data.data;
-        const sectionId = sectionData._id;
-
-        for (const subsection of subsections.filter(
-          (sub) => sub.sectionId === sections.indexOf(section)
-        )) {
-          await axios.post(
-            `${import.meta.env.VITE_BACKEND_URL}/courses/create-subsection`,
-            { ...subsection, sectionId },
-            {
-              withCredentials: true,
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-        }
-      }
       setLoader(false);
-      navigate(`/courses/${courseId}`);
+      setState(2);
     } catch (error) {
       setLoader(false);
       setError(
-        error.response.data.message ||
+        error?.response?.data?.message ||
           error.message ||
           "error in creating course Plase check all field"
       );
@@ -170,6 +139,7 @@ const CourseForm = () => {
           setState={setState}
           course={course}
           selectedOption={selectedOption}
+          createCourse={createCourse}
           category={category}
         />
       )}

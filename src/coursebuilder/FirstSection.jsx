@@ -8,6 +8,7 @@ const FirstSection = ({
   course,
   selectedOption,
   category,
+  createCourse,
 }) => {
   return (
     <div className="flex flex-col gap-4 w-[60%] mx-auto">
@@ -64,7 +65,9 @@ const FirstSection = ({
       />
       <button
         className="  w-1/6 mr-4 text-lg bg-blue-500 rounded-md hover:bg-blue-700 text-white font-bold my-4 py-2 px-4 space-x-2"
-        onClick={() => setState(2)}
+        onClick={() => {
+          createCourse();
+        }}
       >
         Next
       </button>

@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { capitalize } from "../constants"; // removed fetchCurrentUser as it is not used
+import { capitalize } from "../constants";
+import { faSquareCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Coursepage = () => {
   const { id } = useParams();
@@ -11,10 +13,9 @@ const Coursepage = () => {
   const [error, setError] = useState(null);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
-  const [timer, setTimer] = useState(15); // 15 seconds timer
+  const [timer, setTimer] = useState(10); // 15 seconds timer
+  const [expandedSection, setExpandedSection] = useState(null); // State for accordion
   const navigate = useNavigate();
-  console.log(isEnrolled);
-
   const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
@@ -36,7 +37,6 @@ const Coursepage = () => {
 
     fetchCourseDetails();
   }, [id]);
-  console.log(course);
 
   useEffect(() => {
     if (course && user) {
@@ -51,7 +51,7 @@ const Coursepage = () => {
         setTimer((prev) => {
           if (prev <= 1) {
             clearInterval(countdown);
-            navigate(`/dashboard/enrolledcourses`);
+            navigate(`/courses/${id}`);
             return 0;
           }
           return prev - 1;
@@ -118,62 +118,94 @@ const Coursepage = () => {
     }
   };
 
+  const handleSectionToggle = (sectionId) => {
+    setExpandedSection(expandedSection === sectionId ? null : sectionId);
+  };
+
   if (loading) return <div className="text-center py-20">Loading...</div>;
   if (error)
     return <div className="text-center py-20 text-red-500">Error: {error}</div>;
 
   return (
-    <div className="w-[80%] mx-auto py-4 my-20 ">
-      <h1 className="md:text-4xl font-bold text-center ">Course Detail</h1>
+    <div className="w-[80%] mx-auto py-4 my-20">
+      <h1 className="md:text-4xl font-bold text-center">Course Detail</h1>
       {course ? (
-        <div className="container mx-auto shadow-md rounded-lg relative ">
-          <div className=" flex flex-col md:flex-row justify-between bg-zinc-700">
-            <div className=" mt-4 p-4">
+        <div className="container mx-auto shadow-md rounded-lg relative">
+          <div className="flex flex-col md:flex-row justify-between bg-zinc-700">
+            <div className="mt-4 p-4">
               <h1 className="text-4xl font-bold mb-3">{course.courseName}</h1>
-              <h5 className="text-lg font-semibold">
-                Ratings: {course?.ratings}
-              </h5>
-
+              {!isEnrolled && (
+                <h5 className="text-lg font-semibold">
+                  Ratings: {course?.ratings}
+                </h5>
+              )}
               {!isEnrolled ? (
                 <p className="mt-2">
-                  <strong>Price:{course.price}</strong>
+                  <strong>Price: {course.price}</strong>
                 </p>
               ) : null}
             </div>
-            <div className=" p-2">
+            <div className="p-2">
               <img
                 src={course.thumbnail}
-                className="rounded-md size-56 mx-auto "
+                className="rounded-md size-56 mx-auto"
+                alt="Course Thumbnail"
               />
             </div>
           </div>
           <div className="bg-zinc-700 p-4 mt-4 flex flex-col md:flex-row items-center justify-between">
             <div className="md:text-lg mt-2">
-              {!isEnrolled && <h2>About Course :{course.courseDescription}</h2>}
+              {!isEnrolled && <h2>About Course: {course.courseDescription}</h2>}
               <h2>
-                Instructor:
+                Instructor:{" "}
                 {capitalize(course.instructor.firstName) +
                   " " +
                   capitalize(course.instructor.lastName)}
               </h2>
             </div>
-
             <div className="">
               {!isEnrolled ? (
                 <button
                   onClick={() => handleBuyNow()}
-                  className=" mr-4 md:text-lg bg-blue-500 rounded-md hover:bg-blue-700 text-white font-bold my-4 py-2 px-4 space-x-2"
+                  className="mr-4 md:text-lg bg-blue-500 rounded-md hover:bg-blue-700 text-white font-bold my-4 py-2 px-4 space-x-2"
                 >
-                  {" "}
                   Buy Now
                 </button>
               ) : null}
             </div>
           </div>
-          <div className=" bg-zinc-700 p-4 mt-4">
-            <h1 className=" md:text-5xl font-bold ">Course Module</h1>
+          <div className="bg-zinc-700 p-4 mt-4">
+            <h1 className="md:text-5xl font-bold">Course Module</h1>
             {course?.courseContent?.map((content) => (
-              <div className=" mx-auto mt-4 "> {content.sectionName} </div>
+              <div key={content._id} className="mx-auto mt-4">
+                <button
+                  onClick={() => handleSectionToggle(content._id)}
+                  className=" flex justify-between  w-full text-left bg-gray-800 text-white p-2 rounded-md"
+                >
+                  {content.sectionName}
+                  <p className="mx-4">
+                    <FontAwesomeIcon icon={faSquareCaretDown} />
+                  </p>
+                </button>
+
+                {expandedSection === content._id && (
+                  <div className="pl-4">
+                    {isEnrolled ? (
+                      content.subSection?.map((subsection) => (
+                        <div key={subsection._id} className="mb-2">
+                          <div className="">
+                            <h2>{subsection.title}</h2>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-white">
+                        Please Purchase the course for Content{" "}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>
