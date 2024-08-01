@@ -127,7 +127,12 @@ const Coursepage = () => {
     return <div className="text-center py-20 text-red-500">Error: {error}</div>;
 
   return (
-    <div className="w-[80%] mx-auto py-4 my-20">
+    <div className="w-[80%] mx-auto py-4 my-20 relative">
+      {redirecting && (
+        <div className="absolute top-[40%] left-[40%] px-16 z-50 py-4  bg-zinc-600 rounded-lg">
+          Redirecting you in {timer}
+        </div>
+      )}
       <h1 className="md:text-4xl font-bold text-center">Course Detail</h1>
       {course ? (
         <div className="container mx-auto shadow-md rounded-lg relative">

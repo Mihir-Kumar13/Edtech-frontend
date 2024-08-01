@@ -67,6 +67,7 @@ const SignupForm = () => {
 
       toast.success("Signup successful!");
       // Optionally, redirect or perform any additional actions after successful signup
+      Navigate("/login");
     } catch (error) {
       console.error("Error signing up:", error);
       toast.error("Error signing up. Please try again.");
