@@ -51,6 +51,7 @@ const Coursepage = () => {
         setTimer((prev) => {
           if (prev <= 1) {
             clearInterval(countdown);
+            setRedirecting(false);
             navigate(`/courses/${id}`);
             return 0;
           }
@@ -102,7 +103,7 @@ const Coursepage = () => {
           color: "#F37254",
         },
         handler: function () {
-          setRedirecting(true);
+          navigate(0);
         },
         modal: {
           ondismiss: function () {
