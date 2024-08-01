@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router";
 
 const SignupForm = () => {
   const [step, setStep] = useState(1);
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -67,7 +68,7 @@ const SignupForm = () => {
 
       toast.success("Signup successful!");
       // Optionally, redirect or perform any additional actions after successful signup
-      Navigate("/login");
+      navigate("/login");
     } catch (error) {
       console.error("Error signing up:", error);
       toast.error("Error signing up. Please try again.");
