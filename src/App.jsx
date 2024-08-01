@@ -7,7 +7,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "./Store/authSlice";
 import { useEffect, useState } from "react";
-
+import logo from "./assets/4CxDWZ01.svg";
 const App = () => {
   const { loading, error } = useCourse();
   const dispatch = useDispatch();
@@ -44,8 +44,14 @@ const App = () => {
 
   if (loader) {
     return (
-      <div className="bg-zinc-900 min-h-screen text-6xl text-red-500"> </div>
-    ); // Show loader while fetching the user
+      <div className="flex justify-center items-center min-h-screen bg-gray-900">
+        <img
+          src={logo}
+          alt="Logo"
+          className="invert-color w-40 fade-in bounce"
+        />
+      </div>
+    );
   }
 
   return (
