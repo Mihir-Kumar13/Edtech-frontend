@@ -4,10 +4,11 @@ import HomeCard from "./HomeCard";
 import logo1 from "../assets/app-development.png";
 import logo2 from "../assets/data.png";
 import logo3 from "../assets/data2.png";
+
 const offers = [
   {
     id: 1,
-    image: logo1, // Replace with the actual image path or import
+    image: logo1,
     title: "System Design Prep",
     description: "Wanna learn how to build a scalable System?",
     buttonText: "Read More",
@@ -15,7 +16,7 @@ const offers = [
   },
   {
     id: 2,
-    image: logo2, // Replace with the actual image path or import
+    image: logo2,
     title: "Web Development Bootcamp",
     description:
       "Become a full stack web developer with our comprehensive course.",
@@ -24,7 +25,7 @@ const offers = [
   },
   {
     id: 3,
-    image: logo3, // Replace with the actual image path or import
+    image: logo3,
     title: "Data Structures & Algorithms",
     description: "Master DSA with hands-on practice and expert guidance.",
     buttonText: "Learn More",
@@ -35,25 +36,24 @@ const offers = [
 
 const SecondSection = () => {
   return (
-    <div className="mx-auto text-white mt-48">
-      <div>
-        <img src={logo} className="mx-auto size-24" alt="faqs" />
-        <span className="block text-center text-3xl font-bold mt-4">
+    <div className="mx-auto text-white mt-20 px-4 sm:px-6 lg:px-8">
+      <div className="text-center mb-10">
+        <img src={logo} className="mx-auto w-32 h-auto" alt="what we offer" />
+        <span className="block text-2xl sm:text-3xl font-bold mt-4">
           What We Offer
         </span>
       </div>
-      <div className="mt-10 flex justify-evenly mx-auto">
-        {offers.map((offer) => {
-          return (
-            <HomeCard
-              key={offer.id}
-              image={offer.image}
-              title={offer.title}
-              description={offer.description}
-              buttonText={offer.buttonText}
-            />
-          );
-        })}
+      <div className="flex flex-col sm:flex-row sm:space-x-6 space-y-6 sm:space-y-0 justify-center">
+        {offers.map((offer) => (
+          <HomeCard
+            key={offer.id}
+            image={offer.image}
+            title={offer.title}
+            description={offer.description}
+            buttonText={offer.buttonText}
+            onButtonClick={offer.onButtonClick}
+          />
+        ))}
       </div>
     </div>
   );
