@@ -44,7 +44,7 @@ const App = () => {
 
   if (loader) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-900">
+      <div className="flex justify-center items-center min-h-screen bg-zinc-900">
         <img
           src={logo}
           alt="Logo"
