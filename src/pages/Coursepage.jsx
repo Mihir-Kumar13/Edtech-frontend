@@ -9,9 +9,7 @@ import useCourseDetails from "../Hooks/useCourseDetails";
 
 const CoursePage = () => {
   const { id } = useParams();
-
   const { course, loading, error, fetchCourseDetails } = useCourseDetails(id);
-
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [expandedSection, setExpandedSection] = useState(null); // State for accordion
   const navigate = useNavigate();
@@ -63,7 +61,8 @@ const CoursePage = () => {
         theme: {
           color: "#F37254",
         },
-        handler: function () {
+        handler: function (response) {
+          console.log("Payment successful, response:", response);
           fetchCourseDetails();
         },
         modal: {
@@ -101,11 +100,11 @@ const CoursePage = () => {
                   Ratings: {course?.ratings}
                 </h5>
               )}
-              {!isEnrolled ? (
+              {!isEnrolled && (
                 <p className="mt-2">
                   <strong>Price: {course.price}</strong>
                 </p>
-              ) : null}
+              )}
             </div>
             <div className="p-2">
               <img
@@ -126,14 +125,14 @@ const CoursePage = () => {
               </h2>
             </div>
             <div className="">
-              {!isEnrolled ? (
+              {!isEnrolled && (
                 <button
-                  onClick={() => handleBuyNow()}
+                  onClick={handleBuyNow}
                   className="mr-4 md:text-lg bg-blue-500 rounded-md hover:bg-blue-700 text-white font-bold my-4 py-2 px-4 space-x-2"
                 >
                   Buy Now
                 </button>
-              ) : null}
+              )}
             </div>
           </div>
           <div className="bg-zinc-700 p-4 mt-4">

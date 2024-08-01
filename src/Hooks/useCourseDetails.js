@@ -7,7 +7,7 @@ const useCourseDetails = (id) => {
   const [error, setError] = useState(null);
 
   const fetchCourseDetails = useCallback(async () => {
-    console.log("usecoursecalled");
+    console.log("Fetching course details for ID:", id);
     setLoading(true);
     setError(null);
     try {
@@ -15,8 +15,10 @@ const useCourseDetails = (id) => {
         `${import.meta.env.VITE_BACKEND_URL}/courses/get-course`,
         { courseId: id }
       );
+      console.log("Course details fetched:", response.data.data);
       setCourse(response.data.data);
     } catch (error) {
+      console.error("Error fetching course details:", error);
       setError(error.response ? error.response.data.message : error.message);
     } finally {
       setLoading(false);
