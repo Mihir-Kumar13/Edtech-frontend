@@ -10,6 +10,7 @@ const useCourse = () => {
   const courses = useCallback(async () => {
     setLoading(true);
     setError(null);
+
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/courses/showallcourses`

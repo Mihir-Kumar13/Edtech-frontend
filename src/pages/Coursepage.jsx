@@ -1,42 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { capitalize } from "../constants";
 import { faSquareCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import useCourseDetails from "../Hooks/useCourseDetails";
 
-const Coursepage = () => {
+const CoursePage = () => {
   const { id } = useParams();
-  const [course, setCourse] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+
+  const { course, loading, error, fetchCourseDetails } = useCourseDetails(id);
+
   const [isEnrolled, setIsEnrolled] = useState(false);
-  const [redirecting, setRedirecting] = useState(false);
-  const [timer, setTimer] = useState(10); // 10 seconds timer
   const [expandedSection, setExpandedSection] = useState(null); // State for accordion
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
-
-  useEffect(() => {
-    const fetchCourseDetails = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await axios.post(
-          `${import.meta.env.VITE_BACKEND_URL}/courses/get-course`,
-          { courseId: id }
-        );
-        setCourse(response.data.data);
-      } catch (error) {
-        setError(error.response ? error.response.data.message : error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCourseDetails();
-  }, [id]);
 
   useEffect(() => {
     if (course && user) {
@@ -44,24 +23,6 @@ const Coursepage = () => {
       setIsEnrolled(isUserEnrolled);
     }
   }, [course, user]);
-
-  useEffect(() => {
-    if (redirecting) {
-      const countdown = setInterval(() => {
-        setTimer((prev) => {
-          if (prev <= 1) {
-            clearInterval(countdown);
-            setRedirecting(false);
-            navigate(`/courses/${id}`);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-
-      return () => clearInterval(countdown); // Cleanup interval on component unmount
-    }
-  }, [redirecting, navigate, id]);
 
   const handleBuyNow = async () => {
     try {
@@ -129,11 +90,6 @@ const Coursepage = () => {
 
   return (
     <div className="w-[80%] mx-auto py-4 my-20 relative">
-      {redirecting && (
-        <div className="absolute top-[40%] left-[40%] px-16 z-50 py-4 bg-zinc-600 rounded-lg">
-          Redirecting you in {timer}
-        </div>
-      )}
       <h1 className="md:text-4xl font-bold text-center">Course Detail</h1>
       {course ? (
         <div className="container mx-auto shadow-md rounded-lg relative">
@@ -186,7 +142,7 @@ const Coursepage = () => {
               <div key={content._id} className="mx-auto mt-4">
                 <button
                   onClick={() => handleSectionToggle(content._id)}
-                  className=" flex justify-between  w-full text-left bg-gray-800 text-white p-2 rounded-md"
+                  className="flex justify-between w-full text-left bg-gray-800 text-white p-2 rounded-md"
                 >
                   {content.sectionName}
                   <p className="mx-4">
@@ -206,7 +162,7 @@ const Coursepage = () => {
                       ))
                     ) : (
                       <div className="text-white">
-                        Please Purchase the course for Content{" "}
+                        Please Purchase the course for Content
                       </div>
                     )}
                   </div>
@@ -222,4 +178,4 @@ const Coursepage = () => {
   );
 };
 
-export default Coursepage;
+export default CoursePage;
