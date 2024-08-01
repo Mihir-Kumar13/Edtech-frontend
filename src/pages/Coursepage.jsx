@@ -13,7 +13,7 @@ const Coursepage = () => {
   const [error, setError] = useState(null);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
-  const [timer, setTimer] = useState(10); // 15 seconds timer
+  const [timer, setTimer] = useState(10); // 10 seconds timer
   const [expandedSection, setExpandedSection] = useState(null); // State for accordion
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
@@ -60,7 +60,7 @@ const Coursepage = () => {
 
       return () => clearInterval(countdown); // Cleanup interval on component unmount
     }
-  }, [redirecting, navigate]);
+  }, [redirecting, navigate, id]);
 
   const handleBuyNow = async () => {
     try {
@@ -92,7 +92,7 @@ const Coursepage = () => {
         image: thumbnail,
         order_id: paymentResponse.id,
         prefill: {
-          name: capitalize(user.firstName) + capitalize(user.lastName),
+          name: capitalize(user.firstName) + " " + capitalize(user.lastName),
           email: user.email,
         },
         notes: {
@@ -129,7 +129,7 @@ const Coursepage = () => {
   return (
     <div className="w-[80%] mx-auto py-4 my-20 relative">
       {redirecting && (
-        <div className="absolute top-[40%] left-[40%] px-16 z-50 py-4  bg-zinc-600 rounded-lg">
+        <div className="absolute top-[40%] left-[40%] px-16 z-50 py-4 bg-zinc-600 rounded-lg">
           Redirecting you in {timer}
         </div>
       )}
