@@ -48,7 +48,7 @@ const App = () => {
 
   if (loader) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-zinc-900">
+      <div className="flex justify-center items-centerbg-gradient-to-b from-gray-900 to-black min-h-screen">
         <img
           src={logo}
           alt="Logo"
@@ -59,7 +59,7 @@ const App = () => {
   }
 
   return (
-    <div className="flex flex-col bg-gradient-to-b from-gray-900 to-black min-h-screen text-white">
+    <div className="flex flex-col bg-gradient-to-b from-gray-900 to-black min-h-screen  text-white">
       <Header />
       <main className="flex-grow mt-14 shadow-[0_4px_6px_-1px_rgba(255,255,255,0.5),_0_2px_4px_-2px_rgba(255,255,255,0.3)]">
         <TransitionGroup>
