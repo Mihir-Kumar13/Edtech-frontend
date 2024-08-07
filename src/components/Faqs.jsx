@@ -63,65 +63,71 @@ const accordionData = [
   },
 ];
 
+const AccordionItem = ({ item, isActive, onClick }) => (
+  <div className="mb-4 bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-all duration-300 ease-in-out hover:shadow-xl">
+    <button
+      onClick={onClick}
+      className="w-full text-left px-6 py-4 focus:outline-none focus:bg-gray-700 transition-colors duration-200"
+    >
+      <div className="flex justify-between items-center">
+        <span className="font-medium text-lg text-white">{item.question}</span>
+        <svg
+          className={`w-6 h-6 transition-transform duration-200 ${
+            isActive ? "transform rotate-180" : ""
+          }`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M19 9l-7 7-7-7"
+          ></path>
+        </svg>
+      </div>
+    </button>
+    <div
+      className={`overflow-hidden transition-all duration-300 ease-in-out ${
+        isActive ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+      }`}
+    >
+      <div className="px-6 py-4 bg-gray-700 text-gray-300">{item.answer}</div>
+    </div>
+  </div>
+);
+
 const Faqs = () => {
   const [activeIndex, setActiveIndex] = useState(null);
-  const contentRefs = useRef([]);
 
   const toggleAccordion = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
   return (
-    <div className="mt-24">
-      <div>
-        <img src={logo} className="mx-auto size-24" alt="faqs" />
-        <span className="block text-center text-3xl font-bold mt-4">
-          Frequently Asked Questions
-        </span>
-      </div>
-      <div className="w-full mt-12 text-lg">
-        {accordionData.map((item, index) => (
-          <div key={item.id} className="border-b border-gray-200">
-            <button
+    <div className="min-h-screen  text-white py-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        <div className="text-center mb-12">
+          <img src={logo} className="mx-auto w-24 h-24 mb-6" alt="FAQs" />
+          <h1 className="text-4xl font-bold mb-4">
+            Frequently Asked Questions
+          </h1>
+          <p className="text-xl text-gray-400">
+            Find answers to common questions about our platform and courses.
+          </p>
+        </div>
+        <div className="space-y-6">
+          {accordionData.map((item, index) => (
+            <AccordionItem
+              key={item.id}
+              item={item}
+              isActive={activeIndex === index}
               onClick={() => toggleAccordion(index)}
-              className="w-full text-left px-4 py-2 focus:outline-none focus:bg-zinc-600"
-            >
-              <div className="flex justify-between items-center">
-                <span className="font-medium">{item.question}</span>
-                <svg
-                  className={`w-5 h-5 transition-transform duration-200 ${
-                    activeIndex === index ? "transform rotate-180" : ""
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  ></path>
-                </svg>
-              </div>
-            </button>
-            <div
-              ref={(el) => (contentRefs.current[index] = el)}
-              className={`overflow-hidden transition-max-height duration-500 ease-in-out ${
-                activeIndex === index ? "max-h-screen" : "max-h-0"
-              }`}
-              style={{
-                maxHeight:
-                  activeIndex === index
-                    ? `${contentRefs.current[index]?.scrollHeight}px`
-                    : "0px",
-              }}
-            >
-              <div className="px-4 py-2 bg-zinc-600">{item.answer}</div>
-            </div>
-          </div>
-        ))}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

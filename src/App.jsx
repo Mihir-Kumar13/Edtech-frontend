@@ -1,4 +1,5 @@
-import { Outlet } from "react-router";
+import React, { useEffect, useState } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -6,12 +7,15 @@ import useCourse from "./Hooks/useCourseCaegory";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "./Store/authSlice";
-import { useEffect, useState } from "react";
 import logo from "./assets/4CxDWZ01.svg";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import "./animations.css"; // Create this file for your CSS animations
+
 const App = () => {
   const { loading, error } = useCourse();
   const dispatch = useDispatch();
   const [loader, setLoader] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -55,10 +59,14 @@ const App = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-zinc-900 text-white">
+    <div className="flex flex-col bg-gradient-to-b from-gray-900 to-black min-h-screen text-white">
       <Header />
-      <main className="flex-grow mt-20 shadow-[0_4px_6px_-1px_rgba(255,255,255,0.5),_0_2px_4px_-2px_rgba(255,255,255,0.3)]">
-        <Outlet />
+      <main className="flex-grow mt-14 shadow-[0_4px_6px_-1px_rgba(255,255,255,0.5),_0_2px_4px_-2px_rgba(255,255,255,0.3)]">
+        <TransitionGroup>
+          <CSSTransition key={location.key} classNames="fade" timeout={300}>
+            <Outlet />
+          </CSSTransition>
+        </TransitionGroup>
       </main>
       <Footer />
     </div>

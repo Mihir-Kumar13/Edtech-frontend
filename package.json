@@ -14,6 +14,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "axios": "^1.7.2",
+    "framer-motion": "^11.3.22",
     "prettier": "^3.3.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -24,6 +25,7 @@
     "react-router-dom": "^6.24.1",
     "react-slick": "^0.30.2",
     "react-toastify": "^10.0.5",
+    "react-transition-group": "^4.4.5",
     "redux": "^5.0.1",
     "slick-carousel": "^1.8.1"
   },

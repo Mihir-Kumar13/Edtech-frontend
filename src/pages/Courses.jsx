@@ -7,44 +7,39 @@ import "react-toastify/dist/ReactToastify.css";
 import Coursecard from "../components/Coursecard";
 
 const Courses = () => {
-  const handleCourseClick = (courseId) => {
-    navigate(`/courses/${courseId}`);
-  };
-
+  const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
-  const userCourses = user?.courses;
-
   const courses = useSelector((state) => state.course.courses);
+  const categories = useSelector((state) => state.course.categories);
 
-  console.log(userCourses);
-  //console.log(courses);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [categoryDetails, setCategoryDetails] = useState(null);
+
   const filteredCourses = courses?.filter(
-    (course) => !userCourses?.includes(course?._id)
+    (course) => !user?.courses?.includes(course?._id)
   );
 
-  ///courses
-  const category = useSelector((state) => state.course.categories);
+  const handleCourseClick = useCallback(
+    (courseId) => {
+      navigate(`/courses/${courseId}`);
+    },
+    [navigate]
+  );
 
-  const [selectedOption, setSelectedOption] = useState("");
-  const [categoryDetails, setCategoryDetails] = useState(null);
-  const navigate = useNavigate();
-
-  const handleChange = (event) => {
-    setSelectedOption(event.target.value);
-  };
+  const handleCategoryChange = useCallback((event) => {
+    setSelectedCategory(event.target.value);
+  }, []);
 
   useEffect(() => {
-    if (selectedOption) {
+    if (selectedCategory) {
       const fetchCategoryDetails = async () => {
         try {
           const response = await axios.post(
-            `${import.meta.env.VITE_BACKEND_URL}/courses/getCategoryDetails`, // Update with your actual endpoint
-            { categoryId: selectedOption },
+            `${import.meta.env.VITE_BACKEND_URL}/courses/getCategoryDetails`,
+            { categoryId: selectedCategory },
             { withCredentials: true }
           );
           setCategoryDetails(response.data.data);
-          //console.log(response.data.data);
-
           toast.success("Category details fetched successfully");
         } catch (error) {
           console.error("Error fetching category details:", error);
@@ -54,61 +49,60 @@ const Courses = () => {
 
       fetchCategoryDetails();
     }
-  }, [selectedOption]);
+  }, [selectedCategory]);
 
   return (
-    <div className="mt-20 mx-3">
-      <h1 className="text-2xl font-bold mb-4">All Courses</h1>
-      {courses?.length == 0 ? (
-        <div className="text-3xl text-center">No courses on Website</div>
+    <div className="mt-24 container mx-auto px-4">
+      <h1 className="text-3xl font-bold mb-8 text-white">Explore Courses</h1>
+      {courses?.length === 0 ? (
+        <div className="text-3xl text-center text-gray-400">
+          No courses available
+        </div>
       ) : (
         <div>
-          <div>
+          <div className="mb-8">
             <select
-              className="bg-zinc-900"
-              value={selectedOption}
-              onChange={handleChange}
+              className="w-full md:w-64 bg-gray-800 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={selectedCategory}
+              onChange={handleCategoryChange}
             >
-              <option value="">Select an option</option>
-              {category &&
-                category.map((cat) => (
-                  <option key={cat._id} value={cat._id}>
-                    {cat.name}
-                  </option>
-                ))}
+              <option value="">All Categories</option>
+              {categories?.map((cat) => (
+                <option key={cat._id} value={cat._id}>
+                  {cat.name}
+                </option>
+              ))}
             </select>
           </div>
           {categoryDetails ? (
             <div>
-              <h2 className="text-xl font-semibold mt-4">
+              <h2 className="text-2xl font-semibold mt-4 mb-2 text-white">
                 {categoryDetails.categoryName}
               </h2>
-              <p className="text-gray-700 mt-1">
-                <strong>Description:</strong> {categoryDetails.description}
+              <p className="text-gray-400 mb-6">
+                {categoryDetails.description}
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {categoryDetails.allCourses &&
-                  categoryDetails.allCourses
-                    ?.filter((course) => !userCourses?.includes(course?._id))
-                    .map((course, index) => (
-                      <Coursecard
-                        key={index}
-                        course={course}
-                        onClick={handleCourseClick}
-                      />
-                    ))}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {categoryDetails.allCourses
+                  ?.filter((course) => !user?.courses?.includes(course?._id))
+                  .map((course) => (
+                    <Coursecard
+                      key={course._id}
+                      course={course}
+                      onClick={handleCourseClick}
+                    />
+                  ))}
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {courses &&
-                filteredCourses.map((course, index) => (
-                  <Coursecard
-                    key={index}
-                    course={course}
-                    onClick={handleCourseClick}
-                  />
-                ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredCourses.map((course) => (
+                <Coursecard
+                  key={course._id}
+                  course={course}
+                  onClick={handleCourseClick}
+                />
+              ))}
             </div>
           )}
         </div>
