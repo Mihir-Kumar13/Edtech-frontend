@@ -48,7 +48,7 @@ const App = () => {
 
   if (loader) {
     return (
-      <div className="flex justify-center items-centerbg-gradient-to-b from-gray-900 to-black min-h-screen">
+      <div className="flex justify-center items-center bg-gradient-to-b from-gray-900 to-black min-h-screen">
         <img
           src={logo}
           alt="Logo"
