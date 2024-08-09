@@ -82,7 +82,7 @@ const Courses = () => {
               <p className="text-gray-400 mb-6">
                 {categoryDetails.description}
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
                 {categoryDetails.allCourses
                   ?.filter((course) => !user?.courses?.includes(course?._id))
                   .map((course) => (
@@ -95,7 +95,7 @@ const Courses = () => {
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
               {filteredCourses?.map((course) => (
                 <Coursecard
                   key={course._id}

@@ -110,8 +110,8 @@ const CourseForm = () => {
           handleThumbnailChange={handleThumbnailChange}
           handleCourseChange={handleCourseChange}
           handleChange={handleChange}
-          setState={setState}
           course={course}
+          thumbnail={thumbnail}
           selectedOption={selectedOption}
           createCourse={createCourse}
           category={category}
