@@ -52,7 +52,7 @@ const Courses = () => {
   }, [selectedCategory]);
 
   return (
-    <div className="mt-24 container mx-auto px-4">
+    <div className="mt-24 container mx-auto px-4 h-screen">
       <h1 className="text-3xl font-bold mb-8 text-white">Explore Courses</h1>
       {courses?.length === 0 ? (
         <div className="text-3xl text-center text-gray-400">

@@ -43,3 +43,14 @@ body {
 .bounce {
   animation: bounce 2s infinite;
 }
+
+.transition-height {
+  transition: height 0.3s ease;
+}
+.collapse {
+  height: 0;
+  overflow: hidden;
+}
+.expand {
+  height: auto;
+}

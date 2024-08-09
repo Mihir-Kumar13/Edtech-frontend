@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareCaretDown } from "@fortawesome/free-solid-svg-icons";
 import useCourseDetails from "../Hooks/useCourseDetails";
+import "../index.css";
 
 const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
@@ -13,6 +14,7 @@ const CoursePage = () => {
   const { course, loading, error, fetchCourseDetails } = useCourseDetails(id);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [expandedSection, setExpandedSection] = useState(null);
+  const [expandedsubSection, setExpandedsubSection] = useState(null);
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
 
@@ -75,6 +77,11 @@ const CoursePage = () => {
 
   const handleSectionToggle = (sectionId) => {
     setExpandedSection(expandedSection === sectionId ? null : sectionId);
+    setExpandedsubSection(null);
+  };
+
+  const handlesubSectionToggle = (sectionId) => {
+    setExpandedsubSection(expandedSection === sectionId ? null : sectionId);
   };
 
   if (loading) return <div className="text-center py-20">Loading...</div>;
@@ -83,7 +90,7 @@ const CoursePage = () => {
   if (!course) return <p className="text-center">No course details found.</p>;
 
   return (
-    <div className="w-[80%] mx-auto py-4 my-20">
+    <div className="w-[80%] mx-auto py-4 my-20 ">
       <h1 className="text-4xl font-bold text-center mb-8">Course Details</h1>
       <div className="bg-zinc-800 rounded-lg shadow-lg overflow-hidden">
         <div className="flex flex-col md:flex-row justify-between p-6 bg-zinc-700">
@@ -94,7 +101,7 @@ const CoursePage = () => {
             {!isEnrolled && (
               <div className="text-gray-300">
                 <p className="mb-2">Ratings: {course.ratings}</p>
-                <p className="font-semibold">Price: ${course.price}</p>
+                <p className="font-semibold">Price: ₹{course.price}</p>
               </div>
             )}
           </div>
@@ -138,8 +145,23 @@ const CoursePage = () => {
                 <div className="pl-6 mt-2 space-y-2">
                   {isEnrolled ? (
                     content.subSection?.map((subsection) => (
-                      <div key={subsection._id} className="text-white">
-                        {subsection.title}
+                      <div key={subsection._id} className="text-white flex">
+                        <div
+                          onClick={() => handlesubSectionToggle(subsection._id)}
+                          className="flex justify-between items-center w-full text-left bg-gray-800 text-white p-3 rounded-md hover:bg-gray-700 transition duration-300"
+                        >
+                          <div> {subsection.title} </div>
+                          {expandedsubSection === subsection._id && (
+                            <div className="transition-height expand ">
+                              <video
+                                src={subsection.videoUrl}
+                                controls
+                                className="h-auto w-1/2"
+                                aria-label={`Video for ${subsection.title}`}
+                              />
+                            </div>
+                          )}
+                        </div>
                       </div>
                     ))
                   ) : (
