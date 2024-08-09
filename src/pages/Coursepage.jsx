@@ -84,7 +84,12 @@ const CoursePage = () => {
     setExpandedsubSection(expandedSection === sectionId ? null : sectionId);
   };
 
-  if (loading) return <div className="text-center py-20">Loading...</div>;
+  if (loading)
+    return (
+      <div className="text-center py-20">
+        <SkeletonLoader />
+      </div>
+    );
   if (error)
     return <div className="text-center py-20 text-red-500">Error: {error}</div>;
   if (!course) return <p className="text-center">No course details found.</p>;
@@ -178,5 +183,26 @@ const CoursePage = () => {
     </div>
   );
 };
+
+const SkeletonLoader = () => (
+  <div className="p-6 max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-md">
+    <div className="animate-pulse">
+      <div className="bg-gray-700 h-8 w-1/2 rounded mb-4"></div>
+      <div className="flex mb-6">
+        <div className="bg-gray-700 h-40 w-40 rounded-md mr-4"></div>
+        <div className="flex-1">
+          <div className="bg-gray-700 h-6 w-3/4 rounded mb-4"></div>
+          <div className="bg-gray-700 h-4 w-1/2 rounded mb-2"></div>
+          <div className="bg-gray-700 h-4 w-2/3 rounded mb-2"></div>
+        </div>
+      </div>
+      <div>
+        <div className="bg-gray-700 h-6 w-full rounded mb-4"></div>
+        <div className="bg-gray-700 h-6 w-full rounded mb-4"></div>
+        <div className="bg-gray-700 h-6 w-full rounded"></div>
+      </div>
+    </div>
+  </div>
+);
 
 export default CoursePage;
