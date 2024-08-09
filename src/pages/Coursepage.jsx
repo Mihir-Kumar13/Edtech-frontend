@@ -2,8 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSquareCaretDown } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronDown,
+  faPlay,
+  faStar,
+} from "@fortawesome/free-solid-svg-icons";
 import useCourseDetails from "../Hooks/useCourseDetails";
 import "../index.css";
 
@@ -14,7 +19,7 @@ const CoursePage = () => {
   const { course, loading, error, fetchCourseDetails } = useCourseDetails(id);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [expandedSection, setExpandedSection] = useState(null);
-  const [expandedsubSection, setExpandedsubSection] = useState(null);
+  const [expandedSubSection, setExpandedSubSection] = useState(null);
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
 
@@ -77,130 +82,208 @@ const CoursePage = () => {
 
   const handleSectionToggle = (sectionId) => {
     setExpandedSection(expandedSection === sectionId ? null : sectionId);
-    setExpandedsubSection(null);
+    setExpandedSubSection(null);
   };
 
-  const handlesubSectionToggle = (sectionId) => {
-    setExpandedsubSection(expandedSection === sectionId ? null : sectionId);
+  const handleSubSectionToggle = (sectionId) => {
+    setExpandedSubSection(expandedSubSection === sectionId ? null : sectionId);
   };
 
-  if (loading)
-    return (
-      <div className="text-center py-20">
-        <SkeletonLoader />
-      </div>
-    );
-  if (error)
-    return <div className="text-center py-20 text-red-500">Error: {error}</div>;
-  if (!course) return <p className="text-center">No course details found.</p>;
+  if (loading) return <SkeletonLoader />;
+  if (error) return <ErrorDisplay message={error} />;
+  if (!course) return <EmptyState message="No course details found." />;
 
   return (
-    <div className="w-[80%] mx-auto py-4 my-20 ">
-      <h1 className="text-4xl font-bold text-center mb-8">Course Details</h1>
-      <div className="bg-zinc-800 rounded-lg shadow-lg overflow-hidden">
-        <div className="flex flex-col md:flex-row justify-between p-6 bg-zinc-700">
-          <div>
-            <h1 className="text-3xl font-bold mb-3 text-white">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl shadow-2xl overflow-hidden"
+      >
+        <div className="flex flex-col md:flex-row justify-between p-6 md:p-10">
+          <div className="md:w-2/3">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
               {course.courseName}
             </h1>
+            <p className="text-xl text-gray-300 mb-6">
+              {course.courseDescription}
+            </p>
+            <div className="flex items-center mb-4">
+              <FontAwesomeIcon icon={faStar} className="text-yellow-400 mr-2" />
+              <span className="text-white">{course.ratings} / 5.0</span>
+            </div>
+            <p className="text-lg text-gray-300">
+              Instructor: {capitalize(course.instructor.firstName)}{" "}
+              {capitalize(course.instructor.lastName)}
+            </p>
+          </div>
+          <div className="md:w-1/3 mt-6 md:mt-0">
+            <img
+              src={course.thumbnail}
+              className="w-full h-64 object-cover rounded-lg shadow-lg"
+              alt="Course Thumbnail"
+            />
             {!isEnrolled && (
-              <div className="text-gray-300">
-                <p className="mb-2">Ratings: {course.ratings}</p>
-                <p className="font-semibold">Price: ₹{course.price}</p>
+              <div className="mt-6 text-center">
+                <p className="text-3xl font-bold text-white mb-4">
+                  ₹{course.price}
+                </p>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleBuyNow}
+                  className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:from-blue-600 hover:to-indigo-700 transition duration-300"
+                >
+                  Enroll Now
+                </motion.button>
               </div>
             )}
           </div>
-          <img
-            src={course.thumbnail}
-            className="w-56 h-56 object-cover rounded-md mt-4 md:mt-0"
-            alt="Course Thumbnail"
-          />
         </div>
-        <div className="p-6 bg-zinc-600 text-white">
-          <h2 className="text-xl font-semibold mb-2">About the Course</h2>
-          <p>{course.courseDescription}</p>
-          <p className="mt-4">
-            Instructor: {capitalize(course.instructor.firstName)}{" "}
-            {capitalize(course.instructor.lastName)}
-          </p>
-          {!isEnrolled && (
-            <button
-              onClick={handleBuyNow}
-              className="mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300"
-            >
-              Enroll Now
-            </button>
-          )}
-        </div>
-        <div className="p-6 bg-zinc-700">
-          <h2 className="text-2xl font-bold mb-4 text-white">Course Content</h2>
-          {course.courseContent.map((content) => (
-            <div key={content._id} className="mb-4">
-              <button
-                onClick={() => handleSectionToggle(content._id)}
-                className="flex justify-between items-center w-full text-left bg-gray-800 text-white p-3 rounded-md hover:bg-gray-700 transition duration-300"
+        <div className="p-6 md:p-10 bg-gray-800">
+          <h2 className="text-3xl font-bold mb-6 text-white">Course Content</h2>
+          <AnimatePresence>
+            {course.courseContent.map((content) => (
+              <motion.div
+                key={content._id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="mb-4"
               >
-                <span>{content.sectionName}</span>
-                <FontAwesomeIcon
-                  icon={faSquareCaretDown}
-                  className={`transition-transform duration-300 ${expandedSection === content._id ? "transform rotate-180" : ""}`}
-                />
-              </button>
-              {expandedSection === content._id && (
-                <div className="pl-6 mt-2 space-y-2">
-                  {isEnrolled ? (
-                    content.subSection?.map((subsection) => (
-                      <div key={subsection._id} className="text-white flex">
-                        <div
-                          onClick={() => handlesubSectionToggle(subsection._id)}
-                          className="flex justify-between items-center w-full text-left bg-gray-800 text-white p-3 rounded-md hover:bg-gray-700 transition duration-300"
-                        >
-                          <div> {subsection.title} </div>
-                          {expandedsubSection === subsection._id && (
-                            <div className="transition-height expand ">
-                              <video
-                                src={subsection.videoUrl}
-                                controls
-                                className="h-auto w-1/2"
-                                aria-label={`Video for ${subsection.title}`}
-                              />
-                            </div>
-                          )}
+                <button
+                  onClick={() => handleSectionToggle(content._id)}
+                  className="flex justify-between items-center w-full text-left bg-gray-700 text-white p-4 rounded-lg hover:bg-gray-600 transition duration-300"
+                >
+                  <span className="text-lg font-semibold">
+                    {content.sectionName}
+                  </span>
+                  <motion.div
+                    animate={{
+                      rotate: expandedSection === content._id ? 180 : 0,
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <FontAwesomeIcon icon={faChevronDown} />
+                  </motion.div>
+                </button>
+                <AnimatePresence>
+                  {expandedSection === content._id && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="pl-6 mt-2 space-y-2"
+                    >
+                      {isEnrolled ? (
+                        content.subSection?.map((subsection) => (
+                          <motion.div
+                            key={subsection._id}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="bg-gray-700 rounded-lg overflow-hidden"
+                          >
+                            <button
+                              onClick={() =>
+                                handleSubSectionToggle(subsection._id)
+                              }
+                              className="flex justify-between items-center w-full text-left text-white p-3 hover:bg-gray-600 transition duration-300"
+                            >
+                              <div className="flex items-center">
+                                <FontAwesomeIcon
+                                  icon={faPlay}
+                                  className="mr-3 text-blue-400"
+                                />
+                                <span>{subsection.title}</span>
+                              </div>
+                              <motion.div
+                                animate={{
+                                  rotate:
+                                    expandedSubSection === subsection._id
+                                      ? 180
+                                      : 0,
+                                }}
+                                transition={{ duration: 0.3 }}
+                              >
+                                <FontAwesomeIcon icon={faChevronDown} />
+                              </motion.div>
+                            </button>
+                            <AnimatePresence>
+                              {expandedSubSection === subsection._id && (
+                                <motion.div
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: "auto" }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                  transition={{ duration: 0.3 }}
+                                  className="p-4"
+                                >
+                                  <video
+                                    src={subsection.videoUrl}
+                                    controls
+                                    className="w-full rounded-lg shadow-lg"
+                                    aria-label={`Video for ${subsection.title}`}
+                                  />
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </motion.div>
+                        ))
+                      ) : (
+                        <div className="text-gray-400 italic p-4 bg-gray-700 rounded-lg">
+                          Purchase the course to view content
                         </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-gray-400 italic">
-                      Purchase the course to view content
-                    </div>
+                      )}
+                    </motion.div>
                   )}
-                </div>
-              )}
-            </div>
-          ))}
+                </AnimatePresence>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
 
 const SkeletonLoader = () => (
-  <div className="p-6 max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-md">
-    <div className="animate-pulse">
-      <div className="bg-gray-700 h-8 w-1/2 rounded mb-4"></div>
-      <div className="flex mb-6">
-        <div className="bg-gray-700 h-40 w-40 rounded-md mr-4"></div>
-        <div className="flex-1">
-          <div className="bg-gray-700 h-6 w-3/4 rounded mb-4"></div>
-          <div className="bg-gray-700 h-4 w-1/2 rounded mb-2"></div>
-          <div className="bg-gray-700 h-4 w-2/3 rounded mb-2"></div>
-        </div>
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="animate-pulse bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+      <div className="p-6 md:p-10">
+        <div className="bg-gray-700 h-12 w-3/4 rounded-lg mb-4"></div>
+        <div className="bg-gray-700 h-6 w-1/2 rounded-lg mb-4"></div>
+        <div className="bg-gray-700 h-6 w-1/3 rounded-lg mb-4"></div>
+        <div className="bg-gray-700 h-64 w-full rounded-lg"></div>
       </div>
-      <div>
-        <div className="bg-gray-700 h-6 w-full rounded mb-4"></div>
-        <div className="bg-gray-700 h-6 w-full rounded mb-4"></div>
-        <div className="bg-gray-700 h-6 w-full rounded"></div>
+      <div className="p-6 md:p-10 bg-gray-800">
+        <div className="bg-gray-700 h-8 w-1/3 rounded-lg mb-6"></div>
+        {[...Array(3)].map((_, index) => (
+          <div
+            key={index}
+            className="bg-gray-700 h-16 w-full rounded-lg mb-4"
+          ></div>
+        ))}
       </div>
+    </div>
+  </div>
+);
+
+const ErrorDisplay = ({ message }) => (
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
+    <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg">
+      <p className="font-bold">Error</p>
+      <p>{message}</p>
+    </div>
+  </div>
+);
+
+const EmptyState = ({ message }) => (
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
+    <div className="bg-gray-100 p-6 rounded-lg">
+      <p className="text-xl text-gray-600">{message}</p>
     </div>
   </div>
 );
