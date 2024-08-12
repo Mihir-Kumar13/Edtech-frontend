@@ -1,35 +1,9 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import Slider from "react-slick";
 
 const ReviewSection = () => {
-  const reviews = [
-    {
-      id: 1,
-      title: "Great Product",
-      content: "This product really helped me a lot!",
-    },
-    {
-      id: 2,
-      title: "Excellent Service",
-      content: "The customer service was outstanding!",
-    },
-    {
-      id: 3,
-      title: "Highly Recommend",
-      content: "I would highly recommend this to my friends.",
-    },
-    {
-      id: 4,
-      title: "Satisfied Customer",
-      content: "Very satisfied with the purchase.",
-    },
-    { id: 5, title: "Value for Money", content: "Definitely worth the money." },
-    {
-      id: 6,
-      title: "Fantastic",
-      content: "Fantastic quality and fast shipping!",
-    },
-  ];
+  const reviews = useSelector((state) => state.course.reviews);
 
   const settings = {
     dots: true,
@@ -62,17 +36,37 @@ const ReviewSection = () => {
   };
 
   return (
-    <div className="mx-auto text-white mt-12 px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto text-white mt-12 px-4 sm:px-6 lg:px-8 ">
       <span className="block text-center text-2xl sm:text-3xl font-bold mb-6">
         Reviews From Our Students
       </span>
       <div className="carousel-container">
         <Slider {...settings}>
-          {reviews.map((review) => (
-            <div key={review.id} className="p-4">
-              <div className="bg-white text-gray-900 p-6 rounded-lg shadow-lg text-center min-h-[200px]">
-                <h3 className="text-xl font-bold mb-2">{review.title}</h3>
-                <p>{review.content}</p>
+          {reviews?.map((review) => (
+            <div key={review._id} className="p-4">
+              <div className="bg-gray-800 text-white p-6 rounded-lg shadow-lg text-center h-[300px] flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-center mb-4">
+                    <img
+                      src={review.user.image}
+                      alt={`${review.user.firstName} ${review.user.lastName}`}
+                      className="w-16 h-16 rounded-full mr-4"
+                    />
+                    <div>
+                      <h3 className="text-xl font-bold">{`${review.user.firstName} ${review.user.lastName}`}</h3>
+                    </div>
+                  </div>
+                  <p className="text-lg mb-2 line-clamp-3">{review.review}</p>
+                </div>
+                <div>
+                  <div className="flex items-center justify-center">
+                    <span className="text-yellow-400 text-2xl mr-2">★</span>
+                    <span>{review.rating}/5</span>
+                  </div>
+                  <p className="text-sm text-gray-400 mt-2">
+                    Posted on: {new Date(review.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
               </div>
             </div>
           ))}

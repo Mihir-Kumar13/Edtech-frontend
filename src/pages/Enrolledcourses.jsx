@@ -9,8 +9,15 @@ const Enrolledcourses = () => {
     navigate(`/courses/${courseId}`);
   };
   const user = useSelector((state) => state.auth.user);
-  const enrolledCourses = user.courses;
 
+  const uenrolledCourses = user.courses;
+
+  const enrolledCourses = uenrolledCourses.reduce((acc, currentCourse) => {
+    if (!acc.some((course) => course._id === currentCourse._id)) {
+      acc.push(currentCourse);
+    }
+    return acc;
+  }, []);
   console.log(enrolledCourses);
   return (
     <div className="items-start">

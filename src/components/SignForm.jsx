@@ -1,28 +1,32 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router";
 
 const SignupForm = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
   const [step, setStep] = useState(1);
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [otp, setOtp] = useState("");
+  const [accountType, setAccountType] = useState("Student");
 
-  const handleSubmitDetails = (event) => {
-    event.preventDefault();
-    setOtpSent(false); // Reset OTP status
-    sendOTP();
+  const email = watch("email");
+  const otp = watch("otp");
+
+  const handleSubmitDetails = (data) => {
+    setOtpSent(false);
+    sendOTP(data.email);
   };
 
-  const sendOTP = async () => {
+  const sendOTP = async (email) => {
     setLoading(true);
     try {
       const response = await axios.post(
@@ -32,7 +36,7 @@ const SignupForm = () => {
 
       toast.success(response.data.data.message);
       setOtpSent(true);
-      setStep(2); // Move to the next step (enter OTP)
+      setStep(2);
     } catch (error) {
       console.error("Error sending OTP:", error);
       const errorMessage =
@@ -43,21 +47,15 @@ const SignupForm = () => {
     }
   };
 
-  const handleSubmitOTP = async (event) => {
-    event.preventDefault();
-    signupUser();
+  const handleSubmitOTP = async (data) => {
+    signupUser(data);
   };
 
-  const signupUser = async () => {
+  const signupUser = async (data) => {
     setLoading(true);
     const userData = {
-      firstName,
-      lastName,
-      email,
-      password,
-      mobile,
-      accountType: "Student",
-      otp,
+      ...data,
+      accountType,
     };
 
     try {
@@ -67,7 +65,6 @@ const SignupForm = () => {
       );
 
       toast.success("Signup successful!");
-      // Optionally, redirect or perform any additional actions after successful signup
       navigate("/login");
     } catch (error) {
       console.error("Error signing up:", error);
@@ -78,27 +75,31 @@ const SignupForm = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[300px]  text-white">
+    <div className="flex items-center justify-center min-h-[300px] text-white">
       <div className="w-full max-w-md p-8 space-y-6 bg-zinc-800 shadow-md rounded-lg">
         <h2 className="text-2xl font-bold text-center">Signup</h2>
 
         {step === 1 && (
-          <form className="space-y-6" onSubmit={handleSubmitDetails}>
+          <form
+            className="space-y-6"
+            onSubmit={handleSubmit(handleSubmitDetails)}
+          >
             <div>
               <label htmlFor="firstName" className="block text-sm font-medium">
                 First Name
               </label>
               <div className="mt-1">
                 <input
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  {...register("firstName", { required: true })}
                   id="firstName"
                   name="firstName"
                   type="text"
                   autoComplete="given-name"
-                  required
                   className="w-full px-3 py-2 border border-gray-300 bg-zinc-800 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 />
+                {errors.firstName && (
+                  <span className="text-red-500">First name is required</span>
+                )}
               </div>
             </div>
             <div>
@@ -107,15 +108,16 @@ const SignupForm = () => {
               </label>
               <div className="mt-1">
                 <input
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
+                  {...register("lastName", { required: true })}
                   id="lastName"
                   name="lastName"
                   type="text"
                   autoComplete="family-name"
-                  required
                   className="w-full px-3 py-2 border border-gray-300 bg-zinc-800 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 />
+                {errors.lastName && (
+                  <span className="text-red-500">Last name is required</span>
+                )}
               </div>
             </div>
             <div>
@@ -124,15 +126,16 @@ const SignupForm = () => {
               </label>
               <div className="mt-1">
                 <input
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  {...register("email", { required: true })}
                   id="email"
                   name="email"
                   type="email"
                   autoComplete="email"
-                  required
                   className="w-full px-3 py-2 border border-gray-300 bg-zinc-800 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 />
+                {errors.email && (
+                  <span className="text-red-500">Email is required</span>
+                )}
               </div>
             </div>
             <div>
@@ -141,15 +144,16 @@ const SignupForm = () => {
               </label>
               <div className="mt-1">
                 <input
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  {...register("password", { required: true })}
                   id="password"
                   name="password"
                   type="password"
                   autoComplete="new-password"
-                  required
                   className="w-full px-3 py-2 border border-gray-300 bg-zinc-800 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 />
+                {errors.password && (
+                  <span className="text-red-500">Password is required</span>
+                )}
               </div>
             </div>
             <div>
@@ -158,15 +162,50 @@ const SignupForm = () => {
               </label>
               <div className="mt-1">
                 <input
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
+                  {...register("mobile", { required: true })}
                   id="mobile"
                   name="mobile"
                   type="tel"
                   autoComplete="tel"
-                  required
                   className="w-full px-3 py-2 border border-gray-300 bg-zinc-800 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 />
+                {errors.mobile && (
+                  <span className="text-red-500">
+                    Mobile number is required
+                  </span>
+                )}
+              </div>
+            </div>
+            <div>
+              <label
+                htmlFor="accountType"
+                className="block text-sm font-medium mb-2"
+              >
+                Account Type
+              </label>
+              <div className="flex items-center justify-between max-w-[200px] bg-gray-200 rounded-full p-1">
+                <button
+                  type="button"
+                  onClick={() => setAccountType("Student")}
+                  className={`py-2 px-4 rounded-full transition-all duration-300 ${
+                    accountType === "Student"
+                      ? "bg-blue-600 text-white"
+                      : "bg-transparent text-gray-700"
+                  }`}
+                >
+                  Student
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAccountType("Instructor")}
+                  className={`py-2 px-4 rounded-full transition-all duration-300 ${
+                    accountType === "Instructor"
+                      ? "bg-blue-600 text-white"
+                      : "bg-transparent text-gray-700"
+                  }`}
+                >
+                  Instructor
+                </button>
               </div>
             </div>
             <div className="flex justify-end">
@@ -182,22 +221,23 @@ const SignupForm = () => {
         )}
 
         {step === 2 && otpSent && (
-          <form className="space-y-6" onSubmit={handleSubmitOTP}>
+          <form className="space-y-6" onSubmit={handleSubmit(handleSubmitOTP)}>
             <div>
               <label htmlFor="otp" className="block text-sm font-medium">
                 OTP (One Time Password)
               </label>
               <div className="mt-1">
                 <input
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
+                  {...register("otp", { required: true })}
                   id="otp"
                   name="otp"
                   type="text"
                   autoComplete="one-time-code"
-                  required
                   className="w-full px-3 py-2 border border-gray-300 bg-zinc-800 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 />
+                {errors.otp && (
+                  <span className="text-red-500">OTP is required</span>
+                )}
               </div>
             </div>
             <div className="flex justify-between">

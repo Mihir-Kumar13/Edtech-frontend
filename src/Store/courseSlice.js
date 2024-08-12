@@ -5,6 +5,7 @@ const courseSlice = createSlice({
   initialState: {
     courses: null,
     categories: null,
+    reviews: null,
   },
 
   reducers: {
@@ -15,9 +16,12 @@ const courseSlice = createSlice({
     addCategories: (state, action) => {
       state.categories = action.payload;
     },
+    addreviews: (state, action) => {
+      state.reviews = action.payload;
+    },
   },
 });
 
 export default courseSlice.reducer;
 
-export const { addCategories, addCourses } = courseSlice.actions;
+export const { addCategories, addCourses, addreviews } = courseSlice.actions;

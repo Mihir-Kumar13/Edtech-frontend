@@ -1,3 +1,4 @@
+// CoursePage.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -10,6 +11,7 @@ import {
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import useCourseDetails from "../Hooks/useCourseDetails";
+import ReviewForm from "../components/ReviewForm";
 import "../index.css";
 
 const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -53,7 +55,7 @@ const CoursePage = () => {
         amount: paymentResponse.amount,
         currency: paymentResponse.currency,
         name: courseName,
-        description: courseDescription,
+        description: "Course Payment",
         image: thumbnail,
         order_id: paymentResponse.id,
         prefill: {
@@ -244,6 +246,7 @@ const CoursePage = () => {
             ))}
           </AnimatePresence>
         </div>
+        {isEnrolled && <ReviewForm courseId={id} />}
       </motion.div>
     </div>
   );
