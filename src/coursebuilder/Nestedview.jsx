@@ -18,7 +18,7 @@ const SubsectionForm = ({ sectionId, onSubmit, loading }) => {
       <input
         {...register("subsectionTitle", { required: true })}
         placeholder="Subsection Title"
-        className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full p-2 border bg-gray-800 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <input
         type="file"
@@ -46,9 +46,7 @@ const Subsection = ({ subsection }) => {
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex justify-between items-center px-4 py-2 text-left focus:outline-none"
       >
-        <span className="font-medium text-gray-700 text-white">
-          {subsection.title}
-        </span>
+        <span className="font-medium text-white">{subsection.title}</span>
         {isOpen ? <FaChevronUp /> : <FaChevronDown />}
       </button>
       {isOpen && (
@@ -88,9 +86,6 @@ const Nestedview = () => {
           formData,
           {
             withCredentials: true,
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
           }
         );
 
