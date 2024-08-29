@@ -1,12 +1,12 @@
 pipeline {
     agent any
                
-     environment {
-        NODE_ENV = 'production'
+      environment {
+        NODE_VERSION = 'NodeJS 22.7' // This should match the name you gave in Global Tool Configuration
     }
 
     tools {
-        nodejs 'Node 22' // Name of the NodeJS installation configured in Jenkins
+        nodejs NODE_VERSION
     }
 
     stages {
