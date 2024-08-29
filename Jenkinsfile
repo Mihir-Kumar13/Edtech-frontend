@@ -2,7 +2,7 @@ pipeline {
     agent any
                
       environment {
-        NODE_VERSION = 'NodeJS 22.7' // This should match the name you gave in Global Tool Configuration
+        NODE_VERSION = 'NodeJS 22.0.0' // This should match the name you gave in Global Tool Configuration
     }
 
     tools {
