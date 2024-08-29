@@ -18,21 +18,26 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                withEnv(["PATH+NODE=${tool 'NodeJS'}/bin"]) {
+                    sh 'npm install'
+                }
             }
         }
 
         stage('Run Build') {
-            steps {
-                sh 'npm run build'
+             steps {
+                withEnv(["PATH+NODE=${tool 'NodeJS'}/bin"]) {
+                    sh 'npm run build'
+                }
             }
         }
 
         stage('Run Tests') {
-            steps {
-                sh 'npm test'
+             steps {
+                withEnv(["PATH+NODE=${tool 'NodeJS'}/bin"]) {
+                    sh 'npm test'
+                }
             }
-        }
 
         stage('Deploy') {
             steps {
