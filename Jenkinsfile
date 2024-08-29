@@ -1,18 +1,10 @@
 pipeline {
     agent any
 
-    environment {
-        NODE_ENV = 'production'
-    }
-
-    tools {
-        nodejs 'Node 22' // Name of the NodeJS installation configured in Jenkins
-    }
-
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Mihir-Kumar13/Edtech-frontend'
+                git branch: 'main', url: 'https://github.com/Mihir-Kumar13/Edtech-frontend.git'
             }
         }
 
@@ -24,34 +16,34 @@ pipeline {
             }
         }
 
-        stage('Run Build') {
-             steps {
+        stage('Build') {
+            steps {
                 withEnv(["PATH+NODE=${tool 'NodeJS'}/bin"]) {
                     sh 'npm run build'
                 }
             }
         }
 
-        stage('Run Tests') {
-             steps {
+        stage('Test') {
+            steps {
                 withEnv(["PATH+NODE=${tool 'NodeJS'}/bin"]) {
                     sh 'npm test'
                 }
             }
+        }
 
         stage('Deploy') {
             steps {
-                // Add deployment steps here, e.g., copying build artifacts to a server or deploying to a cloud service.
-                echo 'Deployment step goes here'
+                echo 'Deploying the application...'
             }
         }
     }
 
     post {
         always {
-            // Cleanup or notifications
-            echo 'Pipeline finished'
+            echo 'Cleaning up...'
         }
     }
 }
+
 
