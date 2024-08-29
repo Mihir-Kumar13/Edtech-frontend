@@ -1,5 +1,13 @@
 pipeline {
     agent any
+               
+     environment {
+        NODE_ENV = 'production'
+    }
+
+    tools {
+        nodejs 'Node 22' // Name of the NodeJS installation configured in Jenkins
+    }
 
     stages {
         stage('Checkout') {
