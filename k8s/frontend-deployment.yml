@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edtech-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: edtech-frontend
+  template:
+    metadata:
+      labels:
+        app: edtech-frontend
+    spec:
+      containers:
+      - name: edtech-frontend
+        image: 761018850843.dkr.ecr.us-east-1.amazonaws.com/edtech-frontend:latest
+        ports:
+        - containerPort: 80

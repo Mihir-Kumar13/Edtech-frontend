@@ -1,0 +1,41 @@
+name: Deploy Frontend
+
+on:
+    push:
+        branches:
+            - main
+   
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: '16'
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Build
+              run: npm run build
+
+            # - name: AWS Configure Crendentials
+            #   uses: aws-actions/configure-aws-credentials@v2
+            #   with:
+            #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID || 'default-access-key-id' }}
+            #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY || 'default-secret-access-key' }}
+            #     aws-region: ${{ secrets.AWS_REGION || 'default-region' }}
+                
+
+            # - name: Build and Push Docker Image
+            #   run: |
+            #       docker build -t my-edtech-frontend .
+            #       aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin <AWS_ECR_URL>
+            #       docker tag my-edtech-frontend:latest <AWS_ECR_URL>/my-edtech-frontend:latest
+            #       docker push <AWS_ECR_URL>/my-edtech-frontend:latest
+          
