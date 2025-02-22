@@ -24,18 +24,18 @@ jobs:
             - name: Build
               run: npm run build
 
-            # - name: AWS Configure Crendentials
-            #   uses: aws-actions/configure-aws-credentials@v2
-            #   with:
-            #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID || 'default-access-key-id' }}
-            #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY || 'default-secret-access-key' }}
-            #     aws-region: ${{ secrets.AWS_REGION || 'default-region' }}
+            - name: AWS Configure Crendentials
+              uses: aws-actions/configure-aws-credentials@v2
+              with:
+                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID || 'default-access-key-id' }}
+                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY || 'default-secret-access-key' }}
+                aws-region: us-east-1
                 
 
-            # - name: Build and Push Docker Image
-            #   run: |
-            #       docker build -t my-edtech-frontend .
-            #       aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin <AWS_ECR_URL>
-            #       docker tag my-edtech-frontend:latest <AWS_ECR_URL>/my-edtech-frontend:latest
-            #       docker push <AWS_ECR_URL>/my-edtech-frontend:latest
+            - name: Build and Push Docker Image
+              run: |
+                  docker build -t my-edtech-frontend .
+                  aws ecr get-login-password --region us-east-1 | docker login --username mkr13 --password-stdin 761018850843.dkr.ecr.us-east-1.amazonaws.com/edtech-frontend
+                  docker tag my-edtech-frontend:latest 761018850843.dkr.ecr.us-east-1.amazonaws.com/edtech-frontend:latest
+                  docker push 761018850843.dkr.ecr.us-east-1.amazonaws.com/edtech-frontend:latest
           
