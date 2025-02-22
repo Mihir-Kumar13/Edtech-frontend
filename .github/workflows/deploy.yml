@@ -35,7 +35,7 @@ jobs:
             - name: Build and Push Docker Image
               run: |
                   docker build -t my-edtech-frontend .
-                  aws ecr get-login-password --region us-east-1 | docker login --username mkr13 --password-stdin 761018850843.dkr.ecr.us-east-1.amazonaws.com/edtech-frontend
+                  aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin 761018850843.dkr.ecr.us-east-1.amazonaws.com
                   docker tag my-edtech-frontend:latest 761018850843.dkr.ecr.us-east-1.amazonaws.com/edtech-frontend:latest
-                  docker push 761018850843.dkr.ecr.us-east-1.amazonaws.com/edtech-frontend:latest
+                  docker push ${{secrets.AWS_URL}}/edtech-frontend:latest
           
