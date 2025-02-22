@@ -36,6 +36,6 @@ jobs:
               run: |
                   docker build -t my-edtech-frontend .
                   aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin 761018850843.dkr.ecr.us-east-1.amazonaws.com
-                  docker tag my-edtech-frontend:latest ${{secrets.AWS_URL}}/edtech-frontend:latest
-                  docker push ${{secrets.AWS_URL}}/edtech-frontend:latest
+                  docker tag my-edtech-frontend:latest ${{ secrets.AWS_ECR_URL }}
+                  docker push ${{ secrets.AWS_ECR_URL }}
           
