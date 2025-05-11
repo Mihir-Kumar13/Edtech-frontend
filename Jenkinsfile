@@ -3,9 +3,11 @@ pipeline {
 
     stages{
         stage("Cloning the Repository") 
+            steps{
            echo 'Cloning repository...'
         // This assumes your Jenkins job is connected to GitHub via the SCM configuration.
            checkout scm
+            }
 
         stage("Installing Dependencies the project") {
             steps {
